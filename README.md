@@ -1,3 +1,3 @@
 # Twitchbot
 
-Making a general purpose titch chat bot
+Making a general purpose twitch chat bot
