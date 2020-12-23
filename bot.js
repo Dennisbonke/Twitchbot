@@ -357,7 +357,6 @@ function getParam(msg, n) {
   for (var i = 0; i < n; i++) {
     args2 = [...args2, args[i]];
   }
-  console.log(args2);
   return args2;
 }
 
