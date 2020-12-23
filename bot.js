@@ -47,7 +47,8 @@ function onMessageHandler(target, context, msg, self) {
   var user, check, commandName = "";
 
   // Ignore messages from the bot
-  if (self) return;
+  if (self)
+    return;
 
   // Set the commandname
   if (msg.indexOf('!') === 0)
@@ -85,30 +86,33 @@ function onMessageHandler(target, context, msg, self) {
     // Management commands
     // Command will timeout a certain user for a set time, command needs parameters [user] [time]
     case 'timeout':
-      user = getParam(msg, 9);
-      check = checkParam(user);
-      if (check === 0 && checkMod(context, target)) client.say(target, `/timeout ${user}`);
-      else error = setError(target, commandName);
+      user = getParam(msg, 2);
+      if (checkMod(context, target))
+        client.say(target, `/timeout ${user[0]} ${user[1]}`);
+      else
+        error = setError(target, commandName);
       consoleDebug(commandName, DEBUG, error);
       commandExecuted = true;
       break;
 
     // Command will ban users for a certain reason, command needs parameters [user] [reason]
     case 'ban':
-      user = getParam(msg, 5);
-      check = checkParam(user);
-      if (check === 0 && checkMod(context, target)) client.say(target, `/ban ${user}`);
-      else error = setError(target, commandName);
+      user = getParam(msg, 1);
+      if (checkMod(context, target))
+        client.say(target, `/ban ${user[0]}`);
+      else
+        error = setError(target, commandName);
       consoleDebug(commandName, DEBUG, error);
       commandExecuted = true;
       break;
 
     // This command will unban a certain user
     case 'unban':
-      user = getParam(msg, 5);
-      check = checkParam(user);
-      if (check === 0 && checkMod(context, target)) client.say(target, `/unban ${user}`);
-      else error = setError(target, commandName);
+      user = getParam(msg, 1);
+      if (checkMod(context, target))
+        client.say(target, `/unban ${user[0]}`);
+      else
+        error = setError(target, commandName);
       consoleDebug(commandName, DEBUG, error);
       commandExecuted = true;
       break;
@@ -122,9 +126,12 @@ function onMessageHandler(target, context, msg, self) {
       axios.get(`https://beta.decapi.me/twitch/uptime/${channel}`)
         .then(response => {
           time = response.data;
-          if (time == 'undefined') error = setError(target, commandName);
-          else if (time == `${channel} is offline`) client.say(target, `${channel} is currently not streaming.`);
-          else client.say(target, `${channel} has been live for ${time}.`);
+          if (time == 'undefined')
+            error = setError(target, commandName);
+          else if (time == `${channel} is offline`)
+            client.say(target, `${channel} is currently not streaming.`);
+          else
+            client.say(target, `${channel} has been live for ${time}.`);
         })
         .catch(err => {
           error = API_ERROR;
@@ -189,8 +196,10 @@ function onMessageHandler(target, context, msg, self) {
       axios.get(`https://decapi.me/twitch/followcount/${channel}`)
         .then(response => {
           followers = response.data;
-          if (subs == 'undefined') error = setError(target, commandName);
-          else client.say(target, `${channel} has a total of ${followers} Simpais.`);
+          if (subs == 'undefined')
+            error = setError(target, commandName);
+          else
+            client.say(target, `${channel} has a total of ${followers} Simpais.`);
         })
         .catch(err => {
           error = API_ERROR;
@@ -219,7 +228,7 @@ function onMessageHandler(target, context, msg, self) {
     // R6 commands
     // Returns my current siege sens
     case 'sens':
-      client.say(target, `6/6 83 - 400 DPI`);
+      client.say(target, `10/10 58 75 83 87 89 91 - 400 DPI`);
       consoleDebug(commandName, DEBUG, error);
       commandExecuted = true;
       break;
@@ -342,21 +351,21 @@ function consoleDebug(command, debug, err) {
 }
 
 // This function will extract the parameters of a given command
-function getParam(msg) {
-
-}
-
-// This function checks the params for a given command
-function checkParam(param) {
-  if (param != '') return 0;
-  return -1;
+function getParam(msg, n) {
+  const args = msg.slice(msg.indexOf(' ') + 1).split(' ');
+  var args2 = [];
+  for (var i = 0; i < n; i++) {
+    args2 = [...args2, args[i]];
+  }
+  console.log(args2);
+  return args2;
 }
 
 // Gets he first word of the message send in chat
 function getCommand(msg) {
   const startIndex = 1;
   const whiteIndex = (msg.indexOf(' ') > 0) ? msg.indexOf(' ') - 1 : msg.length - 1;
-  return msg.substr(startIndex, whiteIndex).trim();
+  return msg.substr(startIndex, whiteIndex).trim().toLowerCase();
 }
 
 // This function displays an error message in chat
@@ -374,6 +383,6 @@ function rollDice() {
   return Math.floor(Math.random() * sides) + 1;
 }
 
-function duelPlayer(user, channel) {
+function duelPlayer(user, challengedUser, channel) {
 
 }
