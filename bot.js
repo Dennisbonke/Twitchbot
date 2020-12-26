@@ -2,6 +2,7 @@
 const tmi = require('tmi.js');
 const axios = require('axios');
 const config = require('./config.json');
+const userdata = require('./userdata.json');
 
 // List of constants/MACROS
 const DEBUG = true;
@@ -383,5 +384,17 @@ function rollDice() {
 }
 
 function duelPlayer(user, challengedUser, channel) {
+  if (user === challengedUser)
+    return DEFAULT_ERROR;
+
+  for (i = 0; i < userdata.userdata.length; i++) {
+    if (user == userdata.userdata[i].username)
+      var userPoints = userdata.userdata[i].points;
+
+    if (challengedUser == userdata.userdata[i].username)
+      var challengedUserPoints = userdata.userdata[i].points;
+  }
+
+
 
 }
