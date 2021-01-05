@@ -73,13 +73,14 @@ function onMessageHandler(target: string, senderData: tmi.Userstate, message: st
         commandName = getCommand(message);
         const matchingAvailableCommand = availableCommands.find(x =>
             (!Array.isArray(x.trigger) && commandName.indexOf(x.trigger.toLowerCase()) === 0) ||
-            (Array.isArray(x.trigger) && x.trigger.some(trigger => commandName.indexOf(trigger.toLowerCase()) === 0))
+            (!Array.isArray(x.alias) && commandName.indexOf(x.alias.toLowerCase()) === 0) ||
+            (Array.isArray(x.alias) && x.alias.some(trigger => commandName.indexOf(trigger.toLowerCase()) === 0))
         );
         if (checkPermission(commandName)) {
             matchingAvailableCommand.execute(params);
             commandExecuted = true;
         }
-    }
+    } 
 
 
     // Check if response is invalid and give a response in chat
