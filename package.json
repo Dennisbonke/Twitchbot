@@ -1,0 +1,29 @@
+{
+  "name": "Twitchbot",
+  "version": "1.0.0",
+  "description": "Making a general purpose twitch chat bot",
+  "main": "src/bot.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node ./dist/bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Westlanderz/Twitchbot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Westlanderz/Twitchbot/issues"
+  },
+  "homepage": "https://github.com/Westlanderz/Twitchbot#readme",
+  "dependencies": {
+    "@types/node": "^14.14.17",
+    "tmi.js": "^1.7.1"
+  },
+  "devDependencies": {
+    "@types/tmi.js": "^1.4.3"
+  }
+}
