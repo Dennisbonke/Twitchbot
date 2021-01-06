@@ -1,5 +1,5 @@
 {
-  "name": "Twitchbot",
+  "name": "twitchbot",
   "version": "1.0.0",
   "description": "Making a general purpose twitch chat bot",
   "main": "src/bot.ts",
