@@ -1,5 +1,6 @@
 import * as tmi from 'tmi.js';
 import { config } from './config.model.js';
+import * as axios from 'axios';
 
 // List of constants/MACROS
 const DEBUG: boolean = true;
@@ -22,11 +23,12 @@ interface ChatCommand {
     readonly trigger: string;
     readonly alias: string | string[];
     readonly needsParams: boolean;
+    readonly amountParams?: number;
     readonly modsOnly?: boolean;
     readonly subOnly?: boolean;
     readonly everyone?: boolean;
 
-    execute: (params?: string | string[], sender?: string) => CommandResult
+    execute: (params?: string[], sender?: string) => CommandResult
 }
 
 interface CommandResult {
@@ -64,17 +66,30 @@ const shoutout: ChatCommand = {
     trigger: 'shoutout',
     alias: ['so', 'shout'],
     needsParams: true,
+    amountParams: 1,
     modsOnly: true,
 
     execute: (params) => {
         consoleDebug(shoutout.trigger, DEBUG);
-        client.say(config.channels[0], `Please go and check out the channel of ${params}, by going to the link: https://www.twitch.tv/${params} 
+        client.say(config.channels[0], `Please go and check out the channel of ${params[0].substr(1)}, by going to the link: https://www.twitch.tv/${params[0].substr(1)} 
         Be sure to give them a follow!!!!`);
         return { isSuccesfull: true }
     }
 }
 
-const availableCommands: ChatCommand[] = [sens, twitter, shoutout];
+const uptime: ChatCommand = {
+    trigger: 'uptime',
+    alias: 'live',
+    needsParams: false,
+    everyone: true,
+
+    execute: () => {
+        var time: any = 0;
+        return { isSuccesfull: true }
+    }
+}
+
+const availableCommands: ChatCommand[] = [sens, twitter, shoutout, uptime];
 
 function onConnectedHandler(addr: any, port: any) {
     console.log(`* Connected to ${addr}:${port}`);
@@ -87,7 +102,7 @@ function onMessageHandler(target: string, senderData: tmi.Userstate, message: st
     var commandName: string = "";
     var error: number = NO_ERROR;
     var commandExecuted: boolean = false;
-    var params: string | string[];
+    var params: string[];
 
     if (message.indexOf('!') === 0) {
         commandName = getCommand(message);
@@ -102,7 +117,12 @@ function onMessageHandler(target: string, senderData: tmi.Userstate, message: st
             consoleDebug(commandName, DEBUG, error);
         }
         if (checkPermission(matchingAvailableCommand, senderData) && matchingAvailableCommand != undefined) {
-            matchingAvailableCommand.execute(params);
+            if (matchingAvailableCommand.needsParams) {
+                params = getParam(message, matchingAvailableCommand.amountParams);
+                matchingAvailableCommand.execute(params);
+            } else {
+                matchingAvailableCommand.execute();
+            }
             commandExecuted = true;
         }
     }

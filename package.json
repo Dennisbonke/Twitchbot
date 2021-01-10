@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/Westlanderz/Twitchbot#readme",
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.21.1",
     "tmi.js": "^1.7.1"
   },
   "devDependencies": {
