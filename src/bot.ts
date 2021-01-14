@@ -19,7 +19,7 @@ client.on('raided', onConnectedHandler);
 
 interface ChatCommand {
     readonly trigger: string;
-    readonly alias?: string | string[];
+    readonly alias: string | string[];
     readonly modsOnly?: boolean;
     readonly subOnly?: boolean;
     readonly everyone?: boolean;
@@ -34,17 +34,19 @@ interface CommandResult {
 
 const sens: ChatCommand = {
     trigger: 'sens',
+    alias: 'sens',
     everyone: true,
 
     execute: () => {
         consoleDebug(sens.trigger, DEBUG);
-        client.say(config.channels[0], `10/10 83 - 400 DPI`);
+        client.say(config.channels[0], `6/6 58 75 83 87 89 91 - 400 DPI`);
         return { isSuccesfull: true }
     }
 }
 
 const twitter: ChatCommand = {
     trigger: 'twitter',
+    alias: 'twitter',
     everyone: true,
 
     execute: () => {
@@ -54,7 +56,7 @@ const twitter: ChatCommand = {
     }
 }
 
-const availableCommands: ChatCommand[] = [sens, twitter];
+const availableCommands: ChatCommand[] = [sens, twitter,];
 
 function onConnectedHandler(addr: any, port: any) {
     console.log(`* Connected to ${addr}:${port}`);
