@@ -1,5 +1,5 @@
 import * as tmi from 'tmi.js';
-import { config } from './config.model.js';
+import Config from './config/config';
 
 // List of constants/MACROS
 const DEBUG: boolean = true;
@@ -7,7 +7,9 @@ const NO_ERROR: number = 0;
 const DEFAULT_ERROR: number = 1;
 const API_ERROR: number = 2;
 
-const client: tmi.Client = tmi.client(config);
+const channels = ['Westlanderz'];
+const config: Config = Config.fromEnv(process.env, channels)
+const client: tmi.Client = tmi.client(config.convertToTMI());
 
 client.connect();
 
@@ -39,7 +41,7 @@ const sens: ChatCommand = {
 
     execute: () => {
         consoleDebug(sens.trigger, DEBUG);
-        client.say(config.channels[0], `6/6 58 75 83 87 89 91 - 400 DPI`);
+        client.say(channels[0], `6/6 58 75 83 87 89 91 - 400 DPI`);
         return { isSuccesfull: true }
     }
 }
@@ -51,7 +53,7 @@ const twitter: ChatCommand = {
 
     execute: () => {
         consoleDebug(twitter.trigger, DEBUG);
-        client.say(config.channels[0], `Follow me on twitter for the latest updates and shit and giggles. https://twitter.com/SenpaiR6`);
+        client.say(channels[0], `Follow me on twitter for the latest updates and shit and giggles. https://twitter.com/SenpaiR6`);
         return { isSuccesfull: true }
     }
 }
