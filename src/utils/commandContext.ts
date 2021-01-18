@@ -7,12 +7,10 @@ export default class CommandContext {
 
     constructor (message: string, prefix: string) {
         this.commandPrefix = prefix;
-        
         const splitMessage = message
             .slice(prefix.length)
             .trim()
             .split(/ +/g);
-
         this.parsedCommandName = splitMessage.shift()!.toLowerCase();
         this.args = splitMessage;
         this.originalMessage = message;
