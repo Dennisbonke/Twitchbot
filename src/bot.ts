@@ -26,6 +26,9 @@ class Client {
         this.client = tmi.client(this.config);
         this.prefix = '!';
         this.client.connect();
+        this.client.on('connected', (addr: any, port: any) => {
+            handler.onConnectedHandler(addr, port)
+        });
     }
 
     public async say(channel: string, message: string) {
@@ -37,10 +40,6 @@ const handler = new Handler();
 export const client = new Client();
 const messageHandler = new MessageHandler(client.prefix);
 
-
-client.client.on('connected', () => {
-    handler.onConnectedHandler
-});
 client.client.on('message', (channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean) => {
     messageHandler.handleMessage(channel, userstate, message, self)
 });
