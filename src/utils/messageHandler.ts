@@ -3,6 +3,8 @@ import { client } from "../bot";
 import Config from "../config/config";
 import Default from "../modules/default";
 import { ListCommands } from "../modules/default/commands";
+import { GreetCommand } from "../modules/default/greet";
+import { PingCommand } from "../modules/default/ping";
 import Module from "../modules/modules";
 import Command from "./command";
 import CommandContext from "./commandContext";
@@ -17,20 +19,19 @@ export default class MessageHandler {
 
     constructor (prefix: string) {
         this.prefix = prefix;
-
         this.commandClasses = [];
         this.moduleClasses = [];
         this.commands = this.commandClasses.map((CommandClass) => new CommandClass());
         this.commands.push(new ListCommands(this.commands));
         this.modules = this.moduleClasses.map((ModuleClass) => new ModuleClass());
-        this.initDefault();
+        this.initDefault();  
     }
 
     public async handleMessage (channel: string, userstate: ChatUserstate, message: string, self: boolean): Promise<void> {
-        if (self)
+        if (self || !this.isCommand(message))
             return;
-
-        const commandContext = new CommandContext(message, this.prefix);
+            
+        const commandContext = new CommandContext(message, this.prefix); 
 
         if (commandContext.parsedCommandName === 'load' && (userstate.mod == true || userstate.username == client.channels[0])) {
             if (commandContext.args.length === 0) {
@@ -78,17 +79,14 @@ export default class MessageHandler {
             return;
         }
 
-        //console.log(this.commands);
-
         const allowedCommands = this.commands.filter((command) =>
             command.hasPermissionToRun(commandContext),
         );
 
         const matchedCommand = this.commands.find((command) =>
             command.commandNames.includes(commandContext.parsedCommandName),
-        );
-
-
+        );      
+        
         if (!matchedCommand) {
             await client.say(channel, "I don't recognize that command. Try !commands.");
         } else if (!allowedCommands.includes(matchedCommand)) {
@@ -103,8 +101,6 @@ export default class MessageHandler {
                     console.log(`Something went wrong with executing ${matchedCommand.commandNames[0]}, ${reason}`);
                 });
         }
-        //console.log(matchedCommand);
-        //client.say(channel, message);
     }
 
     private initDefault (): void {
@@ -140,9 +136,10 @@ export default class MessageHandler {
 
     private updateCommands (): void {
         this.commands = this.commandClasses.map((CommandClass) => new CommandClass());
+        this.commands.push(new ListCommands(this.commands));
     }
 
     private isCommand (message: string): boolean {
-        return false;
+        return message.startsWith(this.prefix);
     }
 }
