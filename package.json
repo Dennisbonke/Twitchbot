@@ -4,8 +4,7 @@
   "description": "Making a general purpose twitch chat bot",
   "main": "src/bot.ts",
   "scripts": {
-    "test": "jest",
-    "test:ci": "jest --ci",
+    "test": "tsc && node --trace-warnings ./dist/bot.js",
     "build": "tsc",
     "start": "tsc && node ./dist/bot.js"
   },
