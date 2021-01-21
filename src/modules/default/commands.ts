@@ -15,10 +15,7 @@ export class ListCommands implements Command {
     async run (commandContext: CommandContext): Promise<void> {
         const allowedCommands = this.commands.filter((command) =>      
             command.hasPermissionToRun(commandContext),      
-        );
-        
-        console.log(allowedCommands);
-        
+        );      
         
         if (commandContext.args.length === 0) {
             // No command specified, give the user a list of all commands they can use.
@@ -37,7 +34,6 @@ export class ListCommands implements Command {
         const matchedCommand = this.commands.find((command) =>
             command.commandNames.includes(commandContext.args[0]),
         );
-        //console.log(matchedCommand);
         
         if (!matchedCommand) {
             await client.say(client.channels[0],

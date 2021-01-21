@@ -60,18 +60,6 @@ client.client.on('raided', handler.onRaidHandler);
 //     }
 // }
 
-// const twitter: ChatCommand = {
-//     trigger: 'twitter',
-//     alias: 'twitter',
-//     everyone: true,
-
-//     execute: () => {
-//         consoleDebug(twitter.trigger, DEBUG);
-//         client.say(channels[0], `Follow me on twitter for the latest updates and shit and giggles. https://twitter.com/SenpaiR6`);
-//         return { isSuccesfull: true }
-//     }
-// }
-
 // const availableCommands: ChatCommand[] = [sens, twitter,];
 
 // function onMessageHandler(target: string, senderData: tmi.Userstate, message: string, botSelf: boolean): void {
