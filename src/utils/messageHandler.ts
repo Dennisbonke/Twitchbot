@@ -1,11 +1,10 @@
-import { ChatUserstate } from "tmi.js";
+import { log } from "console";
+import { ChatUserstate, Userstate } from "tmi.js";
 import { client } from "../bot";
-import Config from "../config/config";
 import Default from "../modules/default";
 import { ListCommands } from "../modules/default/commands";
-import { GreetCommand } from "../modules/default/greet";
-import { PingCommand } from "../modules/default/ping";
 import Module from "../modules/modules";
+import SocialsModule from "../modules/socials";
 import Command from "./command";
 import CommandContext from "./commandContext";
 
@@ -20,7 +19,12 @@ export default class MessageHandler {
     constructor (prefix: string) {
         this.prefix = prefix;
         this.commandClasses = [];
-        this.moduleClasses = [];
+        this.moduleClasses = [
+            SocialsModule,
+        ];
+        this.loadedModules = [
+            ,
+        ];
         this.commands = this.commandClasses.map((CommandClass) => new CommandClass());
         this.commands.push(new ListCommands(this.commands));
         this.modules = this.moduleClasses.map((ModuleClass) => new ModuleClass());
@@ -33,7 +37,7 @@ export default class MessageHandler {
             
         const commandContext = new CommandContext(message, this.prefix); 
 
-        if (commandContext.parsedCommandName === 'load' && (userstate.mod == true || userstate.username == client.channels[0])) {
+        if (commandContext.parsedCommandName === 'load' && this.hasPerms(userstate, client.channels[0])) {
             if (commandContext.args.length === 0) {
                 const modulesUnloaded = [];
                 for (let i = 0; i < this.modules.length; i++) {
@@ -44,37 +48,37 @@ export default class MessageHandler {
                 }
                 const moduleNames = modulesUnloaded.map(
                     (module) => module.moduleName,
-                );
-
-                await client.say(channel, 'You must provide a module to load, here is a list of modules you can load: `' + moduleNames.join(
+                );           
+                await client.say(channel, 'You must provide a module to load, here is a list of modules you can load: ' + moduleNames.join(
                     ', ',
-                ) + '`');
+                ));
             } else {
                 const module = this.modules.find((module) =>
                     module.moduleName.includes(commandContext.args[0]),
                 );
-                this.loadModule(module, message);
+                this.loadModule(module, client.channels[0]);
             }
             return;
-        } else if (commandContext.parsedCommandName === 'load' && (userstate.mod == false || userstate.username == client.channels[0])) {
+        } else if (commandContext.parsedCommandName === 'load' && this.hasPerms(userstate, client.channels[0])) {
             await client.say(channel, `You have no permission to run this command`);
             return;
-        } else if (commandContext.parsedCommandName === 'unload' && (userstate.mod == true || userstate.username == client.channels[0])) {
+        } else if (commandContext.parsedCommandName === 'unload' && this.hasPerms(userstate, client.channels[0])) {
             if (commandContext.args.length === 0) {
                 const moduleNames = this.loadedModules.map(
                     (module) => module.moduleName,
                 );
-                await client.say(channel, 'You must provide a module to unload, here is a list of modules you can load: `' + moduleNames.join(
+                
+                await client.say(channel, 'You must provide a module to unload, here is a list of modules you can unload: ' + moduleNames.join(
                     ', ',
-                ) + '`');
+                ));
             } else {
                 const module = this.modules.find((module) =>
                     module.moduleName.includes(commandContext.args[0]),
                 );
-                this.unloadModule(module, message);
+                this.unloadModule(module, client.channels[0]);
             }
             return;
-        } else if (commandContext.parsedCommandName === 'unload' && userstate.mod == false) {
+        } else if (commandContext.parsedCommandName === 'unload' && this.hasPerms(userstate, client.channels[0])) {
             await client.say(channel, `You have no permission to run this command`);
             return;
         }
@@ -119,6 +123,8 @@ export default class MessageHandler {
     }
 
     private unloadModule (module: any, channel: string): void {
+        if (module == Default)
+            return;
         for (let i = 0; i < this.commandClasses.length; i++) {
             for (let j = 0; j < module.includedCommands.length; j++) {
                 if (this.commandClasses[i] == module.includedCommands[j])
@@ -127,7 +133,7 @@ export default class MessageHandler {
         }
         for (let i = 0; i < this.loadedModules.length; i++) {
             if (module == this.loadedModules[i])
-                this.loadedModules.splice(i, 1);
+                this.loadedModules.splice(i, 1);  
         }
         this.updateCommands();
         client.say(channel, `Unloaded the module ${module.moduleName}`);
@@ -141,5 +147,11 @@ export default class MessageHandler {
 
     private isCommand (message: string): boolean {
         return message.startsWith(this.prefix);
+    }
+
+    private hasPerms (user: Userstate, channel): boolean {
+        if (user["user-type"] === "mod" || user.username === channel.replace("#", "")) 
+            return true;
+        return false;
     }
 }
