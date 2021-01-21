@@ -1,6 +1,7 @@
 import CommandContext from '../../utils/commandContext';
 import Command from '../../utils/command';
 import { client } from '../../bot';
+import { GreetCommand } from './greet';
 
 export class ListCommands implements Command {
     readonly commandNames = ['commands', 'help'];
@@ -12,9 +13,11 @@ export class ListCommands implements Command {
     }
 
     async run (commandContext: CommandContext): Promise<void> {
-        const allowedCommands = this.commands.filter((command) => {     
-            command.hasPermissionToRun(commandContext)       
-        });
+        const allowedCommands = this.commands.filter((command) =>      
+            command.hasPermissionToRun(commandContext),      
+        );
+        
+        console.log(allowedCommands);
         
         
         if (commandContext.args.length === 0) {
@@ -26,7 +29,7 @@ export class ListCommands implements Command {
                 `here is a list of commands you can run: ${commandNames.join(
                     ', ',
                 )}. Try !commands ${commandNames[0]} to learn more about one of them.` +
-                '\nVersion: 0.1 https://github.com/Westlanderz/DiscordBot',
+                '\nVersion: 0.1 https://github.com/Westlanderz/twitchbot',
             );
             return;
         }
