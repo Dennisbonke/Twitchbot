@@ -1,5 +1,4 @@
 import Module from "../modules";
-import { ListCommands } from "./commands";
 import { GreetCommand } from "./greet";
 import { PingCommand } from "./ping";
 
