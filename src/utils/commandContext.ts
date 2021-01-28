@@ -1,12 +1,10 @@
 /** A user-given command extracted from a message. */
 export default class CommandContext {
-    readonly parsedCommandName: string;
-    readonly args: string[];
-    readonly originalMessage: string;
-    readonly commandPrefix: string;
+    public readonly parsedCommandName: string;
+    public readonly args: string[];
+    public readonly originalMessage: string;
 
-    constructor (message: string, prefix: string) {
-        this.commandPrefix = prefix;
+    constructor(message: string, prefix: string) {
         const splitMessage = message
             .slice(prefix.length)
             .trim()

@@ -15,7 +15,7 @@ export default class MessageHandler {
     private moduleClasses: any[];
     private loadedModules: any[];
 
-    constructor (prefix: string) {
+    constructor(prefix: string) {
         this.prefix = prefix;
         this.commandClasses = [];
         this.moduleClasses = [
@@ -27,14 +27,14 @@ export default class MessageHandler {
         this.commands = this.commandClasses.map((CommandClass) => new CommandClass());
         this.commands.push(new ListCommands(this.commands));
         this.modules = this.moduleClasses.map((ModuleClass) => new ModuleClass());
-        this.init_default();  
+        this.init_default();
     }
 
-    public async handleMessage (channel: string, userstate: ChatUserstate, message: string, self: boolean): Promise<void> {
+    public async handleMessage(channel: string, userstate: ChatUserstate, message: string, self: boolean): Promise<void> {
         if (self || !this.isCommand(message))
             return;
-            
-        const commandContext = new CommandContext(message, this.prefix); 
+
+        const commandContext = new CommandContext(message, this.prefix);
 
         if (commandContext.parsedCommandName === 'load' && this.has_perms(userstate, client.channels[0])) {
             if (commandContext.args.length === 0) {
@@ -47,7 +47,7 @@ export default class MessageHandler {
                 }
                 const moduleNames = modulesUnloaded.map(
                     (module) => module.moduleName,
-                );           
+                );
                 await client.say(channel, 'You must provide a module to load, here is a list of modules you can load: ' + moduleNames.join(
                     ', ',
                 ));
@@ -66,7 +66,7 @@ export default class MessageHandler {
                 const moduleNames = this.loadedModules.map(
                     (module) => module.moduleName,
                 );
-                
+
                 await client.say(channel, 'You must provide a module to unload, here is a list of modules you can unload: ' + moduleNames.join(
                     ', ',
                 ));
@@ -88,8 +88,8 @@ export default class MessageHandler {
 
         const matchedCommand = this.commands.find((command) =>
             command.commandNames.includes(commandContext.parsedCommandName),
-        );      
-        
+        );
+
         if (!matchedCommand) {
             await client.say(channel, "I don't recognize that command. Try !commands.");
         } else if (!allowedCommands.includes(matchedCommand)) {
@@ -106,14 +106,14 @@ export default class MessageHandler {
         }
     }
 
-    private init_default (): void {
+    private init_default(): void {
         const module = new Default();
         this.commandClasses.push(...module.includedCommands);
         this.update_commands();
         console.log(`* initialised default commands.`);
     }
 
-    private load_module (module: any, channel: string): void {
+    private load_module(module: any, channel: string): void {
         this.commandClasses.push(...module.includedCommands);
         this.loadedModules.push(module);
         this.update_commands();
@@ -121,7 +121,7 @@ export default class MessageHandler {
         console.log(`* Loaded the module ${module.moduleName}`);
     }
 
-    private unload_module (module: any, channel: string): void {
+    private unload_module(module: any, channel: string): void {
         if (module == Default)
             return;
         for (let i = 0; i < this.commandClasses.length; i++) {
@@ -132,29 +132,29 @@ export default class MessageHandler {
         }
         for (let i = 0; i < this.loadedModules.length; i++) {
             if (module == this.loadedModules[i])
-                this.loadedModules.splice(i, 1);  
+                this.loadedModules.splice(i, 1);
         }
         this.update_commands();
         client.say(channel, `Unloaded the module ${module.moduleName}`);
         console.log(`* Unloaded the module ${module.moduleName}`);
     }
 
-    private update_commands (): void {
+    private update_commands(): void {
         this.commands = this.commandClasses.map((CommandClass) => new CommandClass());
         this.commands.push(new ListCommands(this.commands));
     }
 
-    private isCommand (message: string): boolean {
+    private isCommand(message: string): boolean {
         return message.startsWith(this.prefix);
     }
 
-    private has_perms (user: Userstate, channel): boolean {
-        if (user["user-type"] === "mod" || user.username === channel.replace("#", "")) 
+    private has_perms(user: Userstate, channel: string): boolean {
+        if (user["user-type"] === "mod" || user.username === channel.replace("#", ""))
             return true;
         return false;
     }
 
     private console_debug(): void {
-        
+
     }
 }

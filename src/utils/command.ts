@@ -2,6 +2,6 @@ import CommandContext from './commandContext';
 
 export default interface Command {
     readonly commandNames: string[];
-    run (parsedUserCommand: CommandContext): Promise<void>;
-    hasPermissionToRun (parsedUserCommand: CommandContext): boolean;
+    run(command: CommandContext): Promise<void>;
+    hasPermissionToRun(command: CommandContext): boolean;
 }

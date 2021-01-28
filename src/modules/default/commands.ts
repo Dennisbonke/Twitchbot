@@ -4,19 +4,19 @@ import { client } from '../../bot';
 import { GreetCommand } from './greet';
 
 export class ListCommands implements Command {
-    readonly commandNames = ['commands', 'help'];
+    public readonly commandNames = ['commands', 'help'];
 
     private commands: Command[];
 
-    constructor (commands: Command[]) {
-        this.commands = commands;     
+    constructor(commands: Command[]) {
+        this.commands = commands;
     }
 
-    async run (commandContext: CommandContext): Promise<void> {
-        const allowedCommands = this.commands.filter((command) =>      
-            command.hasPermissionToRun(commandContext),      
-        );      
-        
+    public async run(commandContext: CommandContext): Promise<void> {
+        const allowedCommands = this.commands.filter((command) =>
+            command.hasPermissionToRun(commandContext),
+        );
+
         if (commandContext.args.length === 0) {
             // No command specified, give the user a list of all commands they can use.
             const commandNames = allowedCommands.map(
@@ -34,7 +34,7 @@ export class ListCommands implements Command {
         const matchedCommand = this.commands.find((command) =>
             command.commandNames.includes(commandContext.args[0]),
         );
-        
+
         if (!matchedCommand) {
             await client.say(client.channels[0],
                 "I don't know about that command :(. Try !commands to find all commands you can use.",
@@ -43,7 +43,7 @@ export class ListCommands implements Command {
         }
     }
 
-    hasPermissionToRun (commandContext: CommandContext): boolean {
+    public hasPermissionToRun(): boolean {
         return true;
     }
 }

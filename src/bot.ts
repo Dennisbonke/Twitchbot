@@ -5,11 +5,11 @@ import MessageHandler from './utils/messageHandler';
 
 class Client {
     public client: tmi.Client;
-    private config: tmi.Options;
     public readonly channels: string[];
     public readonly prefix: string;
+    private config: tmi.Options;
 
-    constructor () {
+    constructor() {
         this.channels = [
             'Westlanderz',
         ];

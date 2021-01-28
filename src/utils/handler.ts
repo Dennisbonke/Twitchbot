@@ -15,10 +15,10 @@ export default class Handler {
     }
 
     public on_host_handler(): void {
-        
+
     }
 
     public on_resub_handler(): void {
-        
+
     }
 }
