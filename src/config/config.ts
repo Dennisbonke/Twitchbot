@@ -16,7 +16,7 @@ export default class Config {
 
     static fromEnv(envVars: NodeJS.ProcessEnv, channels: ChannelT[]): Config {
         const username = envVars.TWITCH_USERNAME || 'Westlanderz';
-        const password = envVars.TWITCH_PASSWORD || 'oauth:01uzdji64d8tjte06bf5ugai3ux5q1';   
+        const password = envVars.TWITCH_PASSWORD || 'oauth:qz7ygw3yyot2f7wee2a3snsx0i0xsq';   
 
         if (process.env.NODE_ENV !== 'production') //typeof username !== 'string' || typeof password !== 'string')
             require('dotenv').config();
