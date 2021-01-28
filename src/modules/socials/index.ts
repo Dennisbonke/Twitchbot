@@ -1,4 +1,5 @@
 import Module from "../modules";
+import DiscordCommand from "./discord";
 import TwitterCommand from "./twitter";
 
 export default class SocialsModule implements Module {
@@ -6,6 +7,6 @@ export default class SocialsModule implements Module {
 
     includedCommands = [
         TwitterCommand,
-        
+        DiscordCommand,
     ];
 }
