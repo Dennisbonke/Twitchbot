@@ -1,0 +1,65 @@
+#include "../includes/parser.hpp"
+#include "../includes/commandhandler.hpp"
+#include <cstring>
+
+Parser::Parser(std::string _s_msg, Bot *_bot) : server_message{_s_msg}, bot{_bot} {}
+
+Parser::~Parser() {}
+
+bool Parser::is_command() {
+    return true;
+}
+
+bool Parser::is_ping_message() {
+    return false;
+}
+
+void Parser::parse_server_message(std::string prefix) {
+    std::size_t find_ping = server_message.find("PING");
+    std::size_t find_mod = server_message.find("mod=");
+    // TODO: fix because founders are not subs now
+    std::size_t find_sub = server_message.find("subscriber/");
+    std::size_t find_sender = server_message.find("display-name=");
+    std::size_t find_msg = server_message.find("PRIVMSG");
+    std::size_t find_channel_name = server_message.find(":", find_msg);
+    std::string channel = server_message.substr(find_msg + 8, find_channel_name - find_msg);
+    if(find_ping != std::string::npos) {
+        sender = "server";
+        command = "PING";
+        return;
+    }
+    if(find_mod != std::string::npos) {
+        if(!strcmp(server_message.substr(find_mod, find_mod + 5).c_str(), "mod=1"))
+            mod = true;
+        else
+            mod = false;
+    }
+    if(find_sub != std::string::npos) {
+        if(!strcmp(server_message.substr(find_sub, find_sub + 12).c_str(), "subscriber/"))
+            sub = false;
+        else
+            sub = true;
+    }
+    if(find_sender != std::string::npos) {
+        sender = server_message.substr(find_sender + 13, server_message.find(";", find_sender) - (find_sender + 13));
+    }
+    if(find_msg != std::string::npos) {
+        message = server_message.substr(find_channel_name + 1);
+        if(message.starts_with(prefix)) {
+            CommandHandler *ch = new CommandHandler(bot);
+            ch->search_command(message.substr(1, message.find_first_of(" ") - 1), mod, sub, sender, message);
+            delete ch;
+        } else if(!strcmp(message.c_str(), "prefix"))
+            bot->send_chat_message(bot->is_prefix());
+    }
+}
+
+std::string Parser::is_sender() {
+    return sender;
+}
+
+std::string Parser::server_command() {
+    if(!strcmp(sender.c_str(), "server"))
+        return command;
+    return "";
+}
