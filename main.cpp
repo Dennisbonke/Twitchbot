@@ -13,7 +13,7 @@ int main(void) {
     
     Bot *bot = new Bot("westlanderz", "westlanderz", "!", conn);
     try{
-        bot->log_in("oauth:76z1a4yp3xwt1rvf1x6yxysejwtjmb");
+        bot->log_in("");
         bot->run();
     } catch(std::exception &e) {
         std::cerr << "Exception thrown in main\r\n" << e.what() << std::endl;
