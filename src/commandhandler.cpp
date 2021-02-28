@@ -29,6 +29,8 @@ void CommandHandler::search_command(std::string command, bool mod, bool sub, std
                 _command->execute(sender, original_message, mod, sub, channel);
             else
                 bot->send_chat_message(sender + " you dont have the permissions to run this command.", channel);
+        } else {
+            bot->send_chat_message(sender + " I do not recognise this command. Try !help to see a list of the commands.", channel);
         }
     }
 }

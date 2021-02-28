@@ -2,6 +2,7 @@
 #define _parser_h
 
 #include "bot.hpp"
+#include "../includes/commandhandler.hpp"
 
 class Parser {
     public:
@@ -22,6 +23,7 @@ class Parser {
         std::string message;
         std::string command;
         Bot *bot;
+        CommandHandler *ch;
 };
 
 #endif //_parser_h
