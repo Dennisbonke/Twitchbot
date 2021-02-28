@@ -18,10 +18,9 @@ int main(void) {
     std::vector<std::string> channels;
     config_file.open("config.txt", std::ios::in);
 	if (!config_file) {
-		std::cerr << "No such file" << std::endl;
+		std::cerr << "No config.txt file" << std::endl;
 	} else {
 		char ch;
-
 		while (1) {
 			config_file >> ch;
 			if (config_file.eof())
@@ -31,8 +30,16 @@ int main(void) {
 	}
 	config_file.close();
 
-    channels.push_back("westlanderz");
-    channels.push_back("smurfingisbae");
+    channel_file.open("channels.txt", std::ios::in);
+    if(!channel_file) {
+        std::cerr << "No channels.txt file" << std::endl;
+    } else {
+        std::string line;
+        while(std::getline(channel_file, line)) {
+            channels.push_back(line);
+        }
+    }
+    channel_file.close();
 
     Bot *bot = new Bot("westlanderz", channels, "!", conn);
 
