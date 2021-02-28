@@ -12,12 +12,14 @@ class LurkCommand : public Command {
         bool find_name(std::string) override;
         std::string list_command() override;
         std::string generate_help_message() override;
+        void new_output(std::string) override;
 
     private:
         std::vector<std::string> names;
         bool sub_only;
         bool mod_only;
         Bot *bot;
+        std::string result;
 };
 
 #endif
