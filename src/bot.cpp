@@ -2,8 +2,8 @@
 #include "../includes/parser.hpp"
 #include <iostream>
 
-Bot::Bot(std::string _username, std::string _channel, std::string _prefix, sockpp::tcp_connector *_conn) 
-    : username{_username}, channel{_channel}, prefix{_prefix}, conn{_conn} {}
+Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string _prefix, sockpp::tcp_connector *_conn) 
+    : username{_username}, channels{_channels}, prefix{_prefix}, conn{_conn} {}
 
 Bot::~Bot() {}
 
@@ -26,17 +26,20 @@ void Bot::log_in(std::string password) {
     send_server_message("CAP REQ : twitch.tv/tags");
     send_server_message("CAP REQ : twitch.tv/commands");
 
-    join_msg = "JOIN #";
-    join_msg.append(channel);
-    send_server_message(join_msg);
-
-    // send_chat_message("Joined this channel to help the streamer out");
+    for(auto &channel : channels) {
+        join_msg = "JOIN #";
+        join_msg.append(channel);
+        send_server_message(join_msg);
+        send_chat_message("Joined this channel to help the streamer out", channel);
+    }
 }
 
 void Bot::log_out() {
-    std::string part_msg = "PART #";
-    part_msg.append(channel);
-    send_server_message(part_msg);
+    for(auto &channel : channels) {
+        std::string part_msg = "PART #";
+        part_msg.append(channel);
+        send_server_message(part_msg);
+    }
     send_server_message("QUIT :Bot is shutting down");
 }
 
@@ -53,7 +56,7 @@ void Bot::run() {
     }
 }
 
-void Bot::send_chat_message(const std::string &msg) {
+void Bot::send_chat_message(const std::string &msg, const std::string &channel) {
     std::string send_msg{"PRIVMSG #"};
     send_msg.append(channel);
     send_msg.append(" :");
@@ -94,8 +97,8 @@ std::string Bot::is_username() {
     return username;
 }
 
-std::string Bot::is_channel() {
-    return channel;
+std::vector<std::string> Bot::is_channel() {
+    return channels;
 }
 
 std::string Bot::is_prefix() {

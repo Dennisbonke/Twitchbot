@@ -22,13 +22,13 @@ void CommandHandler::init_command_list() {
     available_commands.push_back(new HelpCommand(available_commands, bot));
 }
 
-void CommandHandler::search_command(std::string command, bool mod, bool sub, std::string sender, std::string original_message) {
+void CommandHandler::search_command(std::string command, bool mod, bool sub, std::string sender, std::string original_message, std::string channel) {
     for(auto &_command : available_commands) {
         if(_command->find_name(command)) {
             if(_command->has_perms_to_run(mod, sub, sender))
-                _command->execute(sender, original_message, mod, sub);
+                _command->execute(sender, original_message, mod, sub, channel);
             else
-                bot->send_chat_message(sender + " you dont have the permissions to run this command.");
+                bot->send_chat_message(sender + " you dont have the permissions to run this command.", channel);
         }
     }
 }

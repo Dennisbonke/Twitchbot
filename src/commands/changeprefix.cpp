@@ -6,7 +6,7 @@ ChangePrefixCommand::ChangePrefixCommand(Bot *_bot) : Command(), sub_only{false}
     names.push_back("change_prefix");
 }
 
-void ChangePrefixCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub) {
+void ChangePrefixCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
     std::string new_prefix;
     size_t find_prefix = original_msg.find(" ");
     if(find_prefix != std::string::npos) {
@@ -14,25 +14,25 @@ void ChangePrefixCommand::execute(std::string sender, std::string original_msg, 
         if(prefix_end != std::string::npos) {
             new_prefix = original_msg.substr(find_prefix + 1, prefix_end - find_prefix);
             bot->new_prefix(new_prefix);
-            bot->send_chat_message("Changed the prefix to " + new_prefix);
+            bot->send_chat_message("Changed the prefix to " + new_prefix, channel);
         } else {
             new_prefix = original_msg.substr(find_prefix + 1);
             bot->new_prefix(new_prefix);
-            bot->send_chat_message("Changed the prefix to " + new_prefix);
+            bot->send_chat_message("Changed the prefix to " + new_prefix, channel);
         }
     } else {
-        bot->send_chat_message("Please provide a new prefix to change to");
+        bot->send_chat_message("Please provide a new prefix to change to", channel);
     }
 }
 
 bool ChangePrefixCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
     if(mod_only) {
-        if(mod || sender == bot->is_channel())
+        if(mod)
             return true;
         else
             return false; 
     } else if(sub_only) {
-        if(sub || mod || sender == bot->is_channel())
+        if(sub || mod)
             return true;
         else
             return false; 
