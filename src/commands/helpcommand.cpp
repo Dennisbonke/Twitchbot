@@ -30,7 +30,7 @@ void HelpCommand::execute(std::string sender, std::string original_msg, bool mod
             help_msg.append(command->list_command());
             help_msg.append(", ");
         }
-        help_msg.append(". Try !help " + names[0] + "to learn more about one of them. Version: 1.0.0 https://github.com/Westlanderz/TwitchBot");
+        help_msg.append(". Try !help " + names[0] + " to learn more about one of them. Version: 1.0.0 https://github.com/Westlanderz/TwitchBot");
         bot->send_chat_message(help_msg);
     }
 }
