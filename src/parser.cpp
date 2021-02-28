@@ -1,10 +1,11 @@
 #include "../includes/parser.hpp"
-#include "../includes/commandhandler.hpp"
 #include <cstring>
 
-Parser::Parser(std::string _s_msg, Bot *_bot) : server_message{_s_msg}, bot{_bot} {}
+Parser::Parser(std::string _s_msg, Bot *_bot) : server_message{_s_msg}, bot{_bot}, ch{new CommandHandler(bot)} {}
 
-Parser::~Parser() {}
+Parser::~Parser() {
+    delete ch;
+}
 
 bool Parser::is_command() {
     return true;
@@ -46,9 +47,7 @@ void Parser::parse_server_message(std::string prefix) {
         std::string channel = server_message.substr(find_msg + 9, find_channel_name - find_msg - 10);
         message = server_message.substr(find_channel_name + 1);
         if(message.starts_with(prefix)) {
-            CommandHandler *ch = new CommandHandler(bot);
             ch->search_command(message.substr(1, message.find_first_of(" ") - 1), mod, sub, sender, message, channel);
-            delete ch;
         } else if(!strcmp(message.c_str(), "prefix"))
             bot->send_chat_message(bot->is_prefix(), channel);
     }
