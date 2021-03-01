@@ -1,7 +1,6 @@
 #ifndef _command_h
 #define _command_h
 
-#include <vector>
 #include "bot.hpp"
 
 class Command {
