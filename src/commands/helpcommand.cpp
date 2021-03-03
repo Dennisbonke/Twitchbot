@@ -1,6 +1,6 @@
 #include "../../includes/commands/helpcommand.hpp"
 
-HelpCommand::HelpCommand(std::vector<Command *> _commands, Bot *_bot) : Command(), sub_only{false}, mod_only{false}, commands{_commands}, bot{_bot} {
+HelpCommand::HelpCommand(std::vector<Command *> _commands, Bot *_bot) : Command(), commands{_commands}, bot{_bot} {
     names.push_back("commands");
     names.push_back("help");
 }
@@ -30,24 +30,13 @@ void HelpCommand::execute(std::string sender, std::string original_msg, bool mod
             help_msg.append(command->list_command());
             help_msg.append(", ");
         }
-        help_msg.append(". Try !help " + names[0] + " to learn more about one of them. Version: 1.0.0 https://github.com/Westlanderz/TwitchBot");
+        help_msg.append(". Try !help " + names[0] + " to learn more about one of them. Version: 1.0.1-beta https://github.com/Westlanderz/TwitchBot");
         bot->send_chat_message(help_msg, channel);
     }
 }
 
 bool HelpCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
-    if(mod_only) {
-        if(mod)
-            return true;
-        else
-            return false; 
-    } else if(sub_only) {
-        if(sub || mod)
-            return true;
-        else
-            return false; 
-    } else
-        return true;
+    return true;
 }
 
 bool HelpCommand::find_name(std::string command_name) {
@@ -65,3 +54,5 @@ std::string HelpCommand::list_command() {
 std::string HelpCommand::generate_help_message() {
     return "I think you know how to use this command.....";
 }
+
+void HelpCommand::new_output(std::string) {}

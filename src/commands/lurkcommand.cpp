@@ -1,6 +1,6 @@
 #include "../../includes/commands/lurkcommand.hpp"
 
-LurkCommand::LurkCommand(Bot *_bot) : Command(), sub_only{false}, mod_only{false}, bot{_bot} {
+LurkCommand::LurkCommand(Bot *_bot) : Command(), bot{_bot} {
     names.push_back("lurk");
 }
 
@@ -9,18 +9,7 @@ void LurkCommand::execute(std::string sender, std::string original_msg, bool mod
 }
 
 bool LurkCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
-    if(mod_only) {
-        if(mod)
-            return true;
-        else
-            return false; 
-    } else if(sub_only) {
-        if(sub || mod) // || sender == bot->is_channel()
-            return true;
-        else
-            return false; 
-    } else
-        return true;
+    return true;
 }
 
 bool LurkCommand::find_name(std::string command_name) {
@@ -37,4 +26,8 @@ std::string LurkCommand::list_command() {
 
 std::string LurkCommand::generate_help_message() {
     return "Use !" + names[0] + " let the streamer know that you are lurking.";
+}
+
+void LurkCommand::new_output(std::string _result) {
+    result = _result;
 }

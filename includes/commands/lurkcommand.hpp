@@ -16,8 +16,6 @@ class LurkCommand : public Command {
 
     private:
         std::vector<std::string> names;
-        bool sub_only;
-        bool mod_only;
         Bot *bot;
         std::string result;
 };

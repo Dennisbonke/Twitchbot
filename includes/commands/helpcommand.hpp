@@ -16,8 +16,6 @@ class HelpCommand : public Command {
 
     private:
         std::vector<std::string> names;
-        bool sub_only;
-        bool mod_only;
         std::vector<Command *> commands;
         Bot *bot;
 };
