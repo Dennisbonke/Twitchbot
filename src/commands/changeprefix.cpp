@@ -44,7 +44,7 @@ std::string ChangePrefixCommand::list_command() {
 }
 
 std::string ChangePrefixCommand::generate_help_message() {
-    return "Use !" + names[0] + " [prefix] to change the prefix of this bot.";
+    return "Use " + bot->is_prefix() + names[0] + " [prefix] to change the prefix of this bot.";
 }
 
 void ChangePrefixCommand::new_output(std::string) {}

@@ -25,7 +25,7 @@ std::string LurkCommand::list_command() {
 }
 
 std::string LurkCommand::generate_help_message() {
-    return "Use !" + names[0] + " let the streamer know that you are lurking.";
+    return "Use  " + bot->is_prefix() + names[0] + " let the streamer know that you are lurking.";
 }
 
 void LurkCommand::new_output(std::string _result) {
