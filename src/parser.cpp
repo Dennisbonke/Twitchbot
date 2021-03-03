@@ -1,7 +1,7 @@
 #include "../includes/parser.hpp"
 #include <cstring>
 
-Parser::Parser(std::string _s_msg, Bot *_bot) : server_message{_s_msg}, bot{_bot}, ch{new CommandHandler(bot)} {}
+Parser::Parser(Bot *_bot) : bot{_bot}, ch{new CommandHandler(bot)} {}
 
 Parser::~Parser() {
     delete ch;
@@ -15,7 +15,7 @@ bool Parser::is_ping_message() {
     return false;
 }
 
-void Parser::parse_server_message(std::string prefix) {
+void Parser::parse_server_message(std::string prefix, std::string server_message) {
     std::size_t find_ping = server_message.find("PING");
     if(find_ping != std::string::npos) {
         sender = "server";
@@ -49,7 +49,7 @@ void Parser::parse_server_message(std::string prefix) {
         if(message.starts_with(prefix)) {
             ch->search_command(message.substr(1, message.find_first_of(" ") - 1), mod, sub, sender, message, channel);
         } else if(!strcmp(message.c_str(), "prefix"))
-            bot->send_chat_message(bot->is_prefix(), channel);
+            bot->send_chat_message("The prefix for this bot is " + bot->is_prefix(), channel);
     }
 }
 
