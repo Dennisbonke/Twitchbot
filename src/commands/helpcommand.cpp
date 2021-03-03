@@ -11,18 +11,24 @@ void HelpCommand::execute(std::string sender, std::string original_msg, bool mod
         if(command->has_perms_to_run(mod, sub, sender))
             allowed_commands.push_back(command);
     }
-    std::size_t find_args = original_msg.find_first_of(" ");
-    std::size_t find_command = original_msg.find_first_of(" ", find_args + 1);
+    std::size_t find_args = original_msg.find(" ");
+    std::size_t find_command = original_msg.find(" ", find_args + 1);
     std::string command_name = "";
     if(find_args != std::string::npos) {
+        std::cout << "Args given" << std::endl;
         if(find_command != std::string::npos) {
-            command_name = original_msg.substr(find_args, find_command - find_args);
+            std::cout << "Command rest of message doesnt matter" << std::endl;
+            command_name = original_msg.substr(find_args + 1, find_command - find_args);
         } else {
-            command_name = original_msg.substr(find_args);
+            std::cout << "Command only" << std::endl;
+            command_name = original_msg.substr(find_args + 1);
         }
-        for(auto &command : allowed_commands) {
-            if(!strcmp(command->list_command().c_str(), command_name.c_str()))
+        std::cout << command_name << std::endl;
+        for(auto &command : allowed_commands) {;
+            if(!strcmp(command->list_command().c_str(), command_name.c_str())) {
                 bot->send_chat_message(command->generate_help_message(), channel);
+                break;
+            }
         }
     } else {
         std::string help_msg = "here is a list of commands you can run: ";
