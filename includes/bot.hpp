@@ -5,6 +5,8 @@
 #include <vector>
 #include <sockpp/tcp_connector.h>
 
+class Parser;
+
 class Bot {
     public:
         Bot(std::string, std::vector<std::string>, std::string, sockpp::tcp_connector *);
@@ -26,6 +28,7 @@ class Bot {
         std::vector<std::string> channels;
         std::string prefix;
         sockpp::tcp_connector *conn;
+        Parser *parser;
 };
 
 #endif //_bot_h
