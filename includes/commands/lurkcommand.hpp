@@ -22,4 +22,4 @@ class LurkCommand : public Command {
         std::string result;
 };
 
-#endif
+#endif //_lurk_h

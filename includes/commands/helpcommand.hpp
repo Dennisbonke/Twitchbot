@@ -22,4 +22,4 @@ class HelpCommand : public Command {
         Bot *bot;
 };
 
-#endif
+#endif //_help_h

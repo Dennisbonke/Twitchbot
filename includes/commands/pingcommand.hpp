@@ -22,4 +22,4 @@ class PingCommand : public Command {
         std::string result;
 };
 
-#endif
+#endif //_ping_command_h

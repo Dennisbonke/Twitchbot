@@ -22,4 +22,4 @@ class ChangePrefixCommand : public Command {
         std::string result;
 };
 
-#endif
+#endif //_change_prefix_h
