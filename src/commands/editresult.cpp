@@ -6,30 +6,30 @@ EditresultCommand::EditresultCommand(std::vector<Command *> _commands, Bot *_bot
 }
 
 void EditresultCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
-    // std::size_t find_command = original_msg.find_first_of(" ");
-    // if(find_command != std::string::npos) {
-    //     std::string commandname{""};
-    //     for(auto &_command : commands) {
-    //         if(_command->find_name(original_msg.substr(1, find_command - 1))) {
-    //             std::size_t find_result = original_msg.find_first_of(" ", find_command);
-    //             if(find_result != std::string::npos) {
-    //                 std::string result = original_msg.substr(find_result + 1);
-    //                 _command->new_output(result);
-    //                 std::string new_result = sender;
-    //                 new_result.append(" i changed the output for ");
-    //                 new_result.append(_command->list_command());
-    //                 new_result.append(" for you.");
-    //                 bot->send_chat_message(new_result, channel);
-    //             } else {
-    //                 bot->send_chat_message("Please provide a new result to change to.", channel);
-    //             }
-    //             return;
-    //         }
-    //     }
-    //     bot->send_chat_message("I dont know that command, try !help for the commandlist.", channel);
-    // } else {
-    //     bot->send_chat_message("Please provide a command to change the result from.", channel);
-    // }
+    std::size_t find_command = original_msg.find_first_of(" ");
+    if(find_command != std::string::npos) {
+        std::string commandname{""};
+        for(auto &_command : commands) {
+            if(_command->find_name(original_msg.substr(1, find_command - 1))) {
+                std::size_t find_result = original_msg.find_first_of(" ", find_command);
+                if(find_result != std::string::npos) {
+                    std::string result = original_msg.substr(find_result + 1);
+                    _command->new_output(result);
+                    std::string new_result = sender;
+                    new_result.append(" i changed the output for ");
+                    new_result.append(_command->list_command());
+                    new_result.append(" for you.");
+                    bot->send_chat_message(new_result, channel);
+                } else {
+                    bot->send_chat_message("Please provide a new result to change to.", channel);
+                }
+                return;
+            }
+        }
+        bot->send_chat_message("I dont know that command, try !help for the commandlist.", channel);
+    } else {
+        bot->send_chat_message("Please provide a command to change the result from.", channel);
+    }
 }
 
 bool EditresultCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
