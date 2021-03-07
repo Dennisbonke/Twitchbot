@@ -6,6 +6,12 @@
 #include <vector>
 #include "includes/bot.hpp"
 
+/**
+ * @brief Main program cycle where the socket and bot are created
+ * 
+ * @return int 
+ */
+
 int main(void) {
     std::string host = "irc.chat.twitch.tv";
     in_port_t port = 6667;
