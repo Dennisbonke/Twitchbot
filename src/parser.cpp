@@ -15,7 +15,7 @@ bool Parser::is_ping_message() {
     return false;
 }
 
-void Parser::parse_server_message(std::string prefix) {
+void Parser::parse_server_message() {
     std::size_t find_ping = server_message.find("PING");
     if(find_ping != std::string::npos) {
         sender = "server";
@@ -46,10 +46,10 @@ void Parser::parse_server_message(std::string prefix) {
         std::size_t find_channel_name = server_message.find_first_of(":", find_msg);
         std::string channel = server_message.substr(find_msg + 9, find_channel_name - find_msg - 10);
         message = server_message.substr(find_channel_name + 1);
-        if(message.starts_with(prefix)) {
+        if(message.starts_with(bot->is_prefix(channel)))
             ch->search_command(message.substr(1, message.find_first_of(" ") - 1), mod, sub, sender, message, channel);
-        } else if(!strcmp(message.c_str(), "prefix"))
-            bot->send_chat_message(bot->is_prefix(), channel);
+        else if(!strcmp(message.c_str(), "prefix"))
+            bot->send_chat_message(bot->is_prefix(channel), channel);
     }
 }
 
