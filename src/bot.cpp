@@ -2,8 +2,12 @@
 #include "../includes/parser.hpp"
 #include <iostream>
 
-Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string _prefix, sockpp::tcp_connector *_conn) 
-    : username{_username}, channels{_channels}, prefix{_prefix}, conn{_conn} {}
+Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string prefix, sockpp::tcp_connector *_conn) 
+    : username{_username}, channels{_channels}, conn{_conn} {
+        for(auto &__channels : _channels) {
+            prefixes.insert(std::pair<std::string, std::string>(__channels, prefix));
+        }
+    }
 
 Bot::~Bot() {}
 
@@ -82,7 +86,7 @@ void Bot::process_messages(std::string &msg) {
             std::cout << currLine << std::endl;
             msg.erase(0, lineBreakPos + 2);
             Parser *parser = new Parser(currLine, this);
-            parser->parse_server_message(prefix);
+            parser->parse_server_message();
             std::string cmd = parser->server_command();
             if(!strcmp(cmd.c_str(), "PING")) {
                 send_server_message("PONG :tmi.twitch.tv");
@@ -101,10 +105,10 @@ std::vector<std::string> Bot::is_channel() {
     return channels;
 }
 
-std::string Bot::is_prefix() {
-    return prefix;
+std::string Bot::is_prefix(const std::string &channel) {
+    return prefixes.at(channel);
 }
 
-void Bot::new_prefix(const std::string &new_prefix) {
-    prefix = new_prefix;
+void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) {
+    prefixes.at(channel) = new_prefix;
 }

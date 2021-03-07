@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <sockpp/tcp_connector.h>
 
 class Bot {
@@ -18,13 +19,13 @@ class Bot {
         void process_messages(std::string &);
         std::string is_username();
         std::vector<std::string> is_channel();
-        std::string is_prefix();
-        void new_prefix(const std::string &);
+        std::string is_prefix(const std::string &);
+        void new_prefix(const std::string &, const std::string &);
 
     private:
         std::string username;
         std::vector<std::string> channels;
-        std::string prefix;
+        std::map<std::string, std::string> prefixes;
         sockpp::tcp_connector *conn;
 };
 
