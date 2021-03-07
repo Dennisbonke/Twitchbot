@@ -1,3 +1,4 @@
 config.txt
 channels.txt
 *.o
+.vscode
