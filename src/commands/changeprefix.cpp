@@ -13,11 +13,11 @@ void ChangePrefixCommand::execute(std::string sender, std::string original_msg, 
         size_t prefix_end = original_msg.find(" ", find_prefix + 1);
         if(prefix_end != std::string::npos) {
             new_prefix = original_msg.substr(find_prefix + 1, prefix_end - find_prefix);
-            bot->new_prefix(new_prefix);
+            bot->new_prefix(new_prefix, channel);
             bot->send_chat_message("Changed the prefix to " + new_prefix, channel);
         } else {
             new_prefix = original_msg.substr(find_prefix + 1);
-            bot->new_prefix(new_prefix);
+            bot->new_prefix(new_prefix, channel);
             bot->send_chat_message("Changed the prefix to " + new_prefix, channel);
         }
     } else {

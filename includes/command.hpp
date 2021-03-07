@@ -13,7 +13,7 @@ class Command {
         virtual bool find_name(std::string) = 0;
         virtual std::string list_command() = 0;
         virtual std::string generate_help_message() = 0;
-        virtual void new_output(std::string) = 0;
+        // virtual void new_output(std::string) = 0;
 };
 
 #endif //_command_h
