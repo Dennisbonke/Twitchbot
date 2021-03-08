@@ -33,7 +33,7 @@ void EditresultCommand::execute(std::string sender, std::string original_msg, bo
 }
 
 bool EditresultCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
-    if(mod || !strcmp(sender.c_str(), "westlanderz") || !strcmp(sender.c_str(), "Westlanderz"))
+    if(mod || bot->is_channel(sender) || bot->is_owner(sender))
         return true;
     return false;
 }

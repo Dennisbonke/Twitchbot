@@ -26,7 +26,7 @@ void ChangePrefixCommand::execute(std::string sender, std::string original_msg, 
 }
 
 bool ChangePrefixCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
-    if(!strcmp(sender.c_str(), "westlanderz") || !strcmp(sender.c_str(), "Westlanderz"))
+    if(bot->is_channel(sender) || bot->is_owner(sender))
         return true;
     return false; 
 }
