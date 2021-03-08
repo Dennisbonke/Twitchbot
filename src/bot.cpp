@@ -3,7 +3,7 @@
 #include <iostream>
 
 Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string _prefix, sockpp::tcp_connector *_conn) 
-    : username{_username}, channels{_channels}, prefix{_prefix}, conn{_conn} {
+    : username{_username}, channels{_channels}, prefix{_prefix}, conn{_conn}, owner{_username} {
         parser = new Parser(this);
     }
 
@@ -98,8 +98,18 @@ std::string Bot::is_username() {
     return username;
 }
 
-std::vector<std::string> Bot::is_channel() {
-    return channels;
+bool Bot::is_channel(const std::string &channel) {
+    for(auto &_channel : channels) {
+        if(!strcmp(_channel.c_str(), channel.c_str()))
+            return  true;
+    }
+    return false;
+}
+
+bool Bot::is_owner(const std::string &_owner) {
+    if(!strcmp(_owner.c_str(), owner.c_str()))
+        return true;
+    return false;
 }
 
 std::string Bot::is_prefix() {

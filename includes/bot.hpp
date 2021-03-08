@@ -19,7 +19,8 @@ class Bot {
         void send_server_message(const std::string &);
         void process_messages(std::string &);
         std::string is_username();
-        std::vector<std::string> is_channel();
+        bool is_channel(const std::string &);
+        bool is_owner(const std::string &);
         std::string is_prefix();
         void new_prefix(const std::string &);
 
@@ -29,6 +30,7 @@ class Bot {
         std::string prefix;
         sockpp::tcp_connector *conn;
         Parser *parser;
+        std::string owner;
 };
 
 #endif //_bot_h
