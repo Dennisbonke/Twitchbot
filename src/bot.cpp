@@ -3,7 +3,7 @@
 #include <iostream>
 
 Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string prefix, sockpp::tcp_connector *_conn) 
-    : username{_username}, channels{_channels}, conn{_conn} {
+    : username{_username}, channels{_channels}, conn{_conn}, owner{_username} {
         for(auto &__channels : _channels) {
             prefixes.insert(std::pair<std::string, std::string>(__channels, prefix));
         }
@@ -102,6 +102,7 @@ std::string Bot::is_username() {
 }
 
 bool Bot::is_channel(const std::string &channel) {
+    // TODO: better check
     for(auto &_channel : channels) {
         if(!strcmp(_channel.c_str(), channel.c_str()))
             return  true;
