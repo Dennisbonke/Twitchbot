@@ -41,7 +41,7 @@ int main(void) {
     }
     channel_file.close();
 
-    Bot *bot = new Bot("westlanderz", channels, "!", conn);
+    Bot *bot = new Bot("Westlanderz", channels, "!", conn);
 
     try{
         bot->log_in(oauthcode);
