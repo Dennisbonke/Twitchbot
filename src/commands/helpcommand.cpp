@@ -22,7 +22,7 @@ void HelpCommand::execute(std::string sender, std::string original_msg, bool mod
         }
         for(auto &command : allowed_commands) {;
             if(!strcmp(command->list_command().c_str(), command_name.c_str())) {
-                bot->send_chat_message(command->generate_help_message(), channel);
+                bot->send_chat_message(command->generate_help_message(channel), channel);
                 break;
             }
         }
@@ -32,7 +32,7 @@ void HelpCommand::execute(std::string sender, std::string original_msg, bool mod
             help_msg.append(command->list_command());
             help_msg.append(", ");
         }
-        help_msg.append(". Try " + bot->is_prefix() +  "help " + names[0] + " to learn more about one of them. Version: 1.0.1-beta https://github.com/Westlanderz/TwitchBot");
+        help_msg.append(". Try " + bot->is_prefix(channel) +  "help " + names[0] + " to learn more about one of them. Version: 1.0.1-beta https://github.com/Westlanderz/TwitchBot");
         bot->send_chat_message(help_msg, channel);
     }
 }
@@ -53,7 +53,7 @@ std::string HelpCommand::list_command() {
     return names[0];
 }
 
-std::string HelpCommand::generate_help_message() {
+std::string HelpCommand::generate_help_message(const std::string &channel) {
     return "I think you know how to use this command.....";
 }
 

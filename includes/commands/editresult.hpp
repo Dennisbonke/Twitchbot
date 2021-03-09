@@ -11,7 +11,7 @@ class EditresultCommand : public Command {
         bool has_perms_to_run(bool, bool, std::string) override;
         bool find_name(std::string) override;
         std::string list_command() override;
-        std::string generate_help_message() override;
+        std::string generate_help_message(const std::string &) override;
         void new_output(std::string) override;
 
     private:

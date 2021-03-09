@@ -34,8 +34,8 @@ std::string PingCommand::list_command() {
     return names[0];
 }
 
-std::string PingCommand::generate_help_message() {
-    return "Use " + bot->is_prefix() + names[0] + " test stuff out hahhaha, dont use normally.";
+std::string PingCommand::generate_help_message(const std::string &channel) {
+    return "Use " + bot->is_prefix(channel) + names[0] + " test stuff out hahhaha, dont use normally.";
 }
 
 void PingCommand::new_output(std::string _result) {

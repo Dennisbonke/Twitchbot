@@ -53,8 +53,8 @@ std::string EditresultCommand::list_command() {
     return names[0];
 }
 
-std::string EditresultCommand::generate_help_message() {
-    return "Use " + bot->is_prefix() + names[0] + " [command] [new-result] to change the output of that command.";
+std::string EditresultCommand::generate_help_message(const std::string &channel) {
+    return "Use " + bot->is_prefix(channel) + names[0] + " [command] [new-result] to change the output of that command.";
 }
 
 void EditresultCommand::new_output(std::string _result) {}
