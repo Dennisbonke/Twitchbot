@@ -20,7 +20,7 @@ void CommandHandler::init_command_list() {
     available_commands.push_back(new PingCommand(bot));
     available_commands.push_back(new ChangePrefixCommand(bot));
     available_commands.push_back(new LurkCommand(bot));
-        // available_commands.push_back(new EditresultCommand(available_commands, bot));
+    available_commands.push_back(new EditresultCommand(available_commands, bot));
     available_commands.push_back(new HelpCommand(available_commands, bot));
 }
 
