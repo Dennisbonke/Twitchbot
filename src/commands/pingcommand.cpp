@@ -3,11 +3,19 @@
 PingCommand::PingCommand(Bot *_bot) : Command(), bot{_bot} {
     names.push_back("ping");
     names.push_back("pong");
-    result = "This is the ping command";
+    result = "This is the ping command ${sender}";
 }
 
 void PingCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
-    bot->send_chat_message(result, channel);
+    std::string new_result{""};
+    std::size_t find_param_result = result.find("${sender}");
+    if(find_param_result != std::string::npos) {
+        new_result.append(result.substr(0, find_param_result));
+        new_result.append(sender);
+    } else {
+        new_result = result;
+    }
+    bot->send_chat_message(new_result, channel);
 }
 
 bool PingCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
