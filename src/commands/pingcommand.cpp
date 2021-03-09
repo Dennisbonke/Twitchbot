@@ -3,10 +3,11 @@
 PingCommand::PingCommand(Bot *_bot) : Command(), bot{_bot} {
     names.push_back("ping");
     names.push_back("pong");
+    result = "This is the ping command";
 }
 
 void PingCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
-    bot->send_chat_message("This is the ping command", channel);
+    bot->send_chat_message(result, channel);
 }
 
 bool PingCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {

@@ -2,10 +2,11 @@
 
 LurkCommand::LurkCommand(Bot *_bot) : Command(), bot{_bot} {
     names.push_back("lurk");
+    result = "A lurk a day will keep twitch at bay.";
 }
 
 void LurkCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
-    bot->send_chat_message("A lurk a day will keep twitch at bay. " + sender + " many thanks for the lurk!", channel);
+    bot->send_chat_message(result, channel);
 }
 
 bool LurkCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
