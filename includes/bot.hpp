@@ -6,6 +6,8 @@
 #include <map>
 #include <sockpp/tcp_connector.h>
 
+class Parser;
+
 class Bot {
     public:
         Bot(std::string, std::vector<std::string>, std::string, sockpp::tcp_connector *);
@@ -18,7 +20,8 @@ class Bot {
         void send_server_message(const std::string &);
         void process_messages(std::string &);
         std::string is_username();
-        std::vector<std::string> is_channel();
+        bool is_channel(const std::string &);
+        bool is_owner(const std::string &);
         std::string is_prefix(const std::string &);
         void new_prefix(const std::string &, const std::string &);
 
@@ -27,6 +30,8 @@ class Bot {
         std::vector<std::string> channels;
         std::map<std::string, std::string> prefixes;
         sockpp::tcp_connector *conn;
+        Parser *parser;
+        std::string owner;
 };
 
 #endif //_bot_h

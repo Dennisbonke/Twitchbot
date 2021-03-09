@@ -7,9 +7,12 @@ Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string 
         for(auto &__channels : _channels) {
             prefixes.insert(std::pair<std::string, std::string>(__channels, prefix));
         }
+        parser = new Parser(this);
     }
 
-Bot::~Bot() {}
+Bot::~Bot() {
+    delete parser;
+}
 
 void Bot::log_in(std::string password) {
     std::string pass_msg, nick_msg, user_msg, join_msg;
@@ -51,7 +54,6 @@ void Bot::run() {
     std::string message_buffer;
 
     // send_chat_message("Hi Chat, its Westlanderz chatbot right here talking....");
-
     while(true) {
         char buffer[513] = {};
         conn->read(buffer, sizeof(buffer) - 1);
@@ -85,13 +87,11 @@ void Bot::process_messages(std::string &msg) {
             std::string currLine(msg.substr(0, lineBreakPos));
             std::cout << currLine << std::endl;
             msg.erase(0, lineBreakPos + 2);
-            Parser *parser = new Parser(currLine, this);
-            parser->parse_server_message();
+            parser->parse_server_message(currLine);
             std::string cmd = parser->server_command();
             if(!strcmp(cmd.c_str(), "PING")) {
                 send_server_message("PONG :tmi.twitch.tv");
             }
-            delete parser;
         } else
             break;
     }
@@ -101,8 +101,18 @@ std::string Bot::is_username() {
     return username;
 }
 
-std::vector<std::string> Bot::is_channel() {
-    return channels;
+bool Bot::is_channel(const std::string &channel) {
+    for(auto &_channel : channels) {
+        if(!strcmp(_channel.c_str(), channel.c_str()))
+            return  true;
+    }
+    return false;
+}
+
+bool Bot::is_owner(const std::string &_owner) {
+    if(!strcmp(_owner.c_str(), owner.c_str()))
+        return true;
+    return false;
 }
 
 std::string Bot::is_prefix(const std::string &channel) {

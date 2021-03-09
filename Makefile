@@ -8,7 +8,7 @@ ODIR = build
 
 LIBS = -lsockpp
 
-OBJECTS = main.o bot.o parser.o commandhandler.o pingcommand.o changeprefix.o lurkcommand.o helpcommand.o
+OBJECTS = main.o bot.o parser.o commandhandler.o pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o
 	
 
 all: $(EXEC)
@@ -26,7 +26,7 @@ bot.o: src/bot.cpp parser.o
 parser.o: src/parser.cpp commandhandler.o
 	$(CXX) $(CXXFLAGS) $<
 
-commandhandler.o: src/commandhandler.cpp pingcommand.o changeprefix.o lurkcommand.o helpcommand.o
+commandhandler.o: src/commandhandler.cpp pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o
 	$(CXX) $(CXXFLAGS) $<
 
 pingcommand.o: src/commands/pingcommand.cpp
@@ -39,6 +39,9 @@ lurkcommand.o: src/commands/lurkcommand.cpp
 	$(CXX) $(CXXFLAGS) $<
 
 helpcommand.o: src/commands/helpcommand.cpp
+	$(CXX) $(CXXFLAGS) $<
+
+editresult.o: src/commands/editresult.cpp
 	$(CXX) $(CXXFLAGS) $<
 
 # Phony targets:

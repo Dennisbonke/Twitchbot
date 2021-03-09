@@ -1,6 +1,6 @@
 #include "../../includes/commands/changeprefix.hpp"
 
-ChangePrefixCommand::ChangePrefixCommand(Bot *_bot) : Command(), sub_only{false}, mod_only{false}, bot{_bot} {
+ChangePrefixCommand::ChangePrefixCommand(Bot *_bot) : Command(), bot{_bot} {
     names.push_back("changeprefix");
     names.push_back("change-prefix");
     names.push_back("change_prefix");
@@ -26,18 +26,9 @@ void ChangePrefixCommand::execute(std::string sender, std::string original_msg, 
 }
 
 bool ChangePrefixCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
-    if(mod_only) {
-        if(mod)
-            return true;
-        else
-            return false; 
-    } else if(sub_only) {
-        if(sub || mod)
-            return true;
-        else
-            return false; 
-    } else
+    if(bot->is_channel(sender) || bot->is_owner(sender))
         return true;
+    return false; 
 }
 
 bool ChangePrefixCommand::find_name(std::string command_name) {
@@ -53,5 +44,7 @@ std::string ChangePrefixCommand::list_command() {
 }
 
 std::string ChangePrefixCommand::generate_help_message() {
-    return "Use !" + names[0] + " [prefix] to change the prefix of this bot.";
+    return "Use " + bot->is_prefix() + names[0] + " [prefix] to change the prefix of this bot.";
 }
+
+void ChangePrefixCommand::new_output(std::string _result) {}
