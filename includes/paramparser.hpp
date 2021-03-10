@@ -9,7 +9,8 @@ class ParamParser {
         ParamParser();
         virtual ~ParamParser() = default;
 
-        std::string parse_command(std::string);
+        std::string parse_command(std::string, std::string);
+        bool check_good_param(std::string);
 
     private:
         std::vector<std::string> params;
