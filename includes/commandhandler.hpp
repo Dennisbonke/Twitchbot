@@ -2,8 +2,9 @@
 #define _chandler_h
 
 #include <vector>
-#include "command.hpp"
-#include "bot.hpp"
+
+class Bot;
+class Command;
 
 class CommandHandler {
     public:
