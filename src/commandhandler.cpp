@@ -1,3 +1,4 @@
+#include "bot.hpp"
 #include "../includes/commandhandler.hpp"
 #include "../includes/command.hpp"
 #include "../includes/commands/pingcommand.hpp"
