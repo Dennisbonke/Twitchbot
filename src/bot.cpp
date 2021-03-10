@@ -87,10 +87,6 @@ void Bot::process_messages(std::string &msg) {
             msg.erase(0, lineBreakPos + 2);
             Parser *parser = new Parser(currLine, this);
             parser->parse_server_message();
-            std::string cmd = parser->server_command();
-            if(!strcmp(cmd.c_str(), "PING")) {
-                send_server_message("PONG :tmi.twitch.tv");
-            }
             delete parser;
         } else
             break;
