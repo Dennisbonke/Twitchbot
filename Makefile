@@ -6,7 +6,7 @@ CXXFLAGS = -std=c++2a -c -Wall -Wextra $(GDB)
 EXEC = twitchbot
 ODIR = build
 
-LIBS = -lsockpp
+LIBS = -lsockpp -pthread
 
 OBJECTS = main.o bot.o parser.o commandhandler.o pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o
 	

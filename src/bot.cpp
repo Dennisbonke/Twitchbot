@@ -2,6 +2,7 @@
 #include "../includes/parser.hpp"
 #include "../includes/commandhandler.hpp"
 #include <iostream>
+#include <thread>
 
 Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string prefix, sockpp::tcp_connector *_conn) 
     : username{_username}, channels{_channels}, conn{_conn}, owner{_username} {
@@ -60,8 +61,14 @@ void Bot::run() {
         char buffer[513] = {};
         conn->read(buffer, sizeof(buffer) - 1);
         message_buffer.append(buffer);
-        process_messages(message_buffer);
+        // TODO: fix the infinite loop created by this
+        std::thread thread(&Bot::process_messages, this, message_buffer);
+        thread.detach();
     }
+}
+
+void Bot::thread_test() {
+    std::cout << "Testing the bot again" << std::endl;
 }
 
 void Bot::send_chat_message(const std::string &msg, const std::string &channel) {
@@ -82,9 +89,9 @@ void Bot::send_server_message(const std::string &msg) {
     }
 }
 
-void Bot::process_messages(std::string &msg) {
+void Bot::process_messages(std::string msg) {
     while (true) {
-        size_t lineBreakPos = msg.find("\r\n");
+        std::size_t lineBreakPos = msg.find("\r\n");
         if (lineBreakPos != std::string::npos) {
             std::string currLine(msg.substr(0, lineBreakPos));
             std::cout << currLine << std::endl;
@@ -93,6 +100,7 @@ void Bot::process_messages(std::string &msg) {
         } else
             break;
     }
+    // TODO: kill the running thread here, detached thread
 }
 
 std::string Bot::is_username() {
