@@ -12,8 +12,6 @@ class Parser {
         bool is_command();
         bool is_ping_message();
         void parse_server_message();
-        std::string is_sender();
-        std::string server_command();
 
     private:
         std::string server_message;

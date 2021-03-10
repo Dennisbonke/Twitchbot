@@ -16,6 +16,7 @@ bool Parser::is_ping_message() {
 }
 
 void Parser::parse_server_message() {
+    sender = "";
     std::size_t find_ping = server_message.find("PING");
     if(find_ping != std::string::npos && find_ping == 1) {
         bot->send_server_message("PONG :tmi.twitch.tv");
@@ -50,14 +51,4 @@ void Parser::parse_server_message() {
         else if(!strcmp(message.c_str(), "prefix"))
             bot->send_chat_message(bot->is_prefix(channel), channel);
     }
-}
-
-std::string Parser::is_sender() {
-    return sender;
-}
-
-std::string Parser::server_command() {
-    if(!strcmp(sender.c_str(), "server"))
-        return command;
-    return "";
 }
