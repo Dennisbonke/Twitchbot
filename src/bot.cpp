@@ -1,11 +1,13 @@
 #include "../includes/bot.hpp"
 #include "../includes/parser.hpp"
+#include "../includes/commandhandler.hpp"
 #include <iostream>
 
 Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string prefix, sockpp::tcp_connector *_conn) 
     : username{_username}, channels{_channels}, conn{_conn}, owner{_username} {
         for(auto &__channels : _channels) {
             prefixes.insert(std::pair<std::string, std::string>(__channels, prefix));
+            commandhandlers.insert(std::pair<std::string, CommandHandler *>(__channels, new CommandHandler(this)));
         }
         parser = new Parser(this);
     }
@@ -88,10 +90,6 @@ void Bot::process_messages(std::string &msg) {
             std::cout << currLine << std::endl;
             msg.erase(0, lineBreakPos + 2);
             parser->parse_server_message(currLine);
-            std::string cmd = parser->server_command();
-            if(!strcmp(cmd.c_str(), "PING")) {
-                send_server_message("PONG :tmi.twitch.tv");
-            }
         } else
             break;
     }
@@ -122,4 +120,12 @@ std::string Bot::is_prefix(const std::string &channel) {
 
 void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) {
     prefixes.at(channel) = new_prefix;
+}
+
+CommandHandler * Bot::is_commandhandler(const std::string &channel) {
+    for(auto const& [key, val] : commandhandlers) {
+        if(!strcmp(key.c_str(), channel.c_str()))
+            return val;
+    }
+    return nullptr;
 }

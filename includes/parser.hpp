@@ -2,7 +2,6 @@
 #define _parser_h
 
 #include "bot.hpp"
-#include "../includes/commandhandler.hpp"
 
 class Parser {
     public:
@@ -12,8 +11,6 @@ class Parser {
         bool is_command();
         bool is_ping_message();
         void parse_server_message(std::string);
-        std::string is_sender();
-        std::string server_command();
 
     private:
         std::string sender;
@@ -22,7 +19,6 @@ class Parser {
         std::string message;
         std::string command;
         Bot *bot;
-        CommandHandler *ch;
 };
 
 #endif //_parser_h

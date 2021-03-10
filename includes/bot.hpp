@@ -7,6 +7,7 @@
 #include <sockpp/tcp_connector.h>
 
 class Parser;
+class CommandHandler;
 
 class Bot {
     public:
@@ -24,11 +25,13 @@ class Bot {
         bool is_owner(const std::string &);
         std::string is_prefix(const std::string &);
         void new_prefix(const std::string &, const std::string &);
+        CommandHandler * is_commandhandler(const std::string &);
 
     private:
         std::string username;
         std::vector<std::string> channels;
         std::map<std::string, std::string> prefixes;
+        std::map<std::string, CommandHandler *> commandhandlers;
         sockpp::tcp_connector *conn;
         Parser *parser;
         std::string owner;

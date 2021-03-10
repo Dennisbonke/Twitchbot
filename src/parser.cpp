@@ -1,11 +1,10 @@
 #include "../includes/parser.hpp"
+#include "../includes/commandhandler.hpp"
 #include <cstring>
 
-Parser::Parser(Bot *_bot) : bot{_bot}, ch{new CommandHandler(bot)} {}
+Parser::Parser(Bot *_bot) : bot{_bot} {}
 
-Parser::~Parser() {
-    delete ch;
-}
+Parser::~Parser() {}
 
 bool Parser::is_command() {
     return true;
@@ -18,8 +17,7 @@ bool Parser::is_ping_message() {
 void Parser::parse_server_message(std::string server_message) {
     std::size_t find_ping = server_message.find("PING");
     if(find_ping != std::string::npos) {
-        sender = "server";
-        command = "PING";
+        bot->send_server_message("PONG :tmi.twitch.tv");
         return;
     }
     std::size_t find_msg = server_message.find("PRIVMSG");
@@ -46,19 +44,9 @@ void Parser::parse_server_message(std::string server_message) {
         std::size_t find_channel_name = server_message.find_first_of(":", find_msg);
         std::string channel = server_message.substr(find_msg + 9, find_channel_name - find_msg - 10);
         message = server_message.substr(find_channel_name + 1);
-        if(message.starts_with(bot->is_prefix(channel)))
-            ch->search_command(message.substr(1, message.find_first_of(" ") - 1), mod, sub, sender, message, channel);
-        else if(!strcmp(message.c_str(), "prefix"))
+        if(message.starts_with(bot->is_prefix(channel))){
+            bot->is_commandhandler(channel)->search_command(message.substr(1, message.find_first_of(" ") - 1), mod, sub, sender, message, channel);
+        } else if(!strcmp(message.c_str(), "prefix"))
             bot->send_chat_message("The prefix for this bot is " + bot->is_prefix(channel), channel);
     }
-}
-
-std::string Parser::is_sender() {
-    return sender;
-}
-
-std::string Parser::server_command() {
-    if(!strcmp(sender.c_str(), "server"))
-        return command;
-    return "";
 }
