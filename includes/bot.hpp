@@ -19,14 +19,13 @@ class Bot {
         void run();
         void send_chat_message(const std::string &, const std::string &);
         void send_server_message(const std::string &);
-        void process_messages(std::string);
+        void process_messages(std::string *);
         std::string is_username();
         bool is_channel(const std::string &);
         bool is_owner(const std::string &);
         std::string is_prefix(const std::string &);
         void new_prefix(const std::string &, const std::string &);
         CommandHandler * is_commandhandler(const std::string &);
-        void thread_test();
 
     private:
         std::string username;
