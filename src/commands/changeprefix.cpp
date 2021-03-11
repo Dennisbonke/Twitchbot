@@ -8,9 +8,9 @@ ChangePrefixCommand::ChangePrefixCommand(Bot *_bot) : Command(), bot{_bot} {
 
 void ChangePrefixCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
     std::string new_prefix;
-    size_t find_prefix = original_msg.find(" ");
+    std::size_t find_prefix = original_msg.find(" ");
     if(find_prefix != std::string::npos) {
-        size_t prefix_end = original_msg.find(" ", find_prefix + 1);
+        std::size_t prefix_end = original_msg.find(" ", find_prefix + 1);
         if(prefix_end != std::string::npos) {
             new_prefix = original_msg.substr(find_prefix + 1, prefix_end - find_prefix);
             bot->new_prefix(new_prefix, channel);
