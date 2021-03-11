@@ -25,6 +25,7 @@ void Parser::parse_server_message(std::string server_message) {
         std::size_t find_mod = server_message.find("mod=");
         // TODO: fix because founders are not subs now
         std::size_t find_sub = server_message.find("subscriber/");
+        std::size_t find_founder = server_message.find("founder/");
         std::size_t find_sender = server_message.find("display-name=");
         if(find_mod != std::string::npos) {
             if(!strcmp(server_message.substr(find_mod, find_mod + 5).c_str(), "mod=1"))
@@ -33,7 +34,13 @@ void Parser::parse_server_message(std::string server_message) {
                 mod = false;
         }
         if(find_sub != std::string::npos) {
-            if(!strcmp(server_message.substr(find_sub, find_sub + 12).c_str(), "subscriber/"))
+            if(!strcmp(server_message.substr(find_sub, find_sub + 12).c_str(), "subscriber/0"))
+                sub = false;
+            else
+                sub = true;
+        }
+        if(find_founder != std::string::npos) {
+            if(!strcmp(server_message.substr(find_founder, find_founder + 9).c_str(), "founder/0"))
                 sub = false;
             else
                 sub = true;
