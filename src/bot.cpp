@@ -62,7 +62,6 @@ void Bot::run() {
         char buffer[513] = {};
         conn->read(buffer, sizeof(buffer) - 1);
         message_buffer.append(buffer);
-        // TODO: make this a async call
         async::run(process_messages(&message_buffer), async::current_queue);
         message_buffer.erase();
     }
