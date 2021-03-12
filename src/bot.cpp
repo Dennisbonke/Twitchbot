@@ -54,6 +54,8 @@ void Bot::log_out() {
 
 void Bot::run() {
     std::string message_buffer;
+    async::run_queue rq;
+	async::queue_scope qs{&rq};
 
     // send_chat_message("Hi Chat, its Westlanderz chatbot right here talking....");
     while(true) {
@@ -61,7 +63,7 @@ void Bot::run() {
         conn->read(buffer, sizeof(buffer) - 1);
         message_buffer.append(buffer);
         // TODO: make this a async call
-        process_messages(&message_buffer);
+        async::run(process_messages(&message_buffer), async::current_queue);
         message_buffer.erase();
     }
 }
@@ -84,7 +86,7 @@ void Bot::send_server_message(const std::string &msg) {
     }
 }
 
-void Bot::process_messages(std::string *msg) {
+async::result<void> Bot::process_messages(std::string *msg) {
     while (true) {
         std::size_t lineBreakPos = msg->find("\r\n");
         if (lineBreakPos != std::string::npos) {
@@ -95,6 +97,7 @@ void Bot::process_messages(std::string *msg) {
         } else
             break;
     }
+    co_return;
 }
 
 std::string Bot::is_username() {

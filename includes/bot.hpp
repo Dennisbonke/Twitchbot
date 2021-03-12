@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <sockpp/tcp_connector.h>
+#include <async/result.hpp>
 
 class Parser;
 class CommandHandler;
@@ -19,7 +20,7 @@ class Bot {
         void run();
         void send_chat_message(const std::string &, const std::string &);
         void send_server_message(const std::string &);
-        void process_messages(std::string *);
+        async::result<void> process_messages(std::string *);
         std::string is_username();
         bool is_channel(const std::string &);
         bool is_owner(const std::string &);

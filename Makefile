@@ -1,12 +1,12 @@
 CXX = g++
 
 GDB = -ggdb
-CXXFLAGS = -std=c++2a -c -Wall -Wextra $(GDB)
+CXXFLAGS = -std=c++2a -c -Wall -Wextra $(GDB) -fcoroutines
 
 EXEC = twitchbot
 ODIR = build
 
-LIBS = -lsockpp -pthread
+LIBS = -lsockpp
 
 OBJECTS = main.o bot.o parser.o commandhandler.o pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o
 	
