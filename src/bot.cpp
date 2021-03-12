@@ -62,7 +62,7 @@ void Bot::run() {
         char buffer[513] = {};
         conn->read(buffer, sizeof(buffer) - 1);
         message_buffer.append(buffer);
-        async::run(process_messages(&message_buffer), async::current_queue);
+        async::run(process_messages(message_buffer), async::current_queue);
         message_buffer.erase();
     }
 }
@@ -85,13 +85,13 @@ void Bot::send_server_message(const std::string &msg) {
     }
 }
 
-async::result<void> Bot::process_messages(std::string *msg) {
+async::result<void> Bot::process_messages(std::string &msg) {
     while (true) {
-        std::size_t lineBreakPos = msg->find("\r\n");
+        std::size_t lineBreakPos = msg.find("\r\n");
         if (lineBreakPos != std::string::npos) {
-            std::string currLine(msg->substr(0, lineBreakPos));
+            std::string currLine(msg.substr(0, lineBreakPos));
             std::cout << currLine << std::endl;
-            msg->erase(0, lineBreakPos + 2);
+            msg.erase(0, lineBreakPos + 2);
             parser->parse_server_message(currLine);
         } else
             break;
