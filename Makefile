@@ -4,7 +4,6 @@ GDB = -ggdb
 CXXFLAGS = -std=c++2a -c -Wall -Wextra $(GDB)
 
 EXEC = twitchbot
-ODIR = build
 
 LIBS = -lsockpp
 
