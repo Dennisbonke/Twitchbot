@@ -22,7 +22,7 @@ class Bot {
         void send_chat_message(const std::string &, const std::string &);
         void send_server_message(const std::string &);
         async::result<void> process_messages(std::string &);
-        void check_timers();
+        async::result<void> check_timers();
         std::string is_username();
         bool is_channel(const std::string &);
         bool is_owner(const std::string &);

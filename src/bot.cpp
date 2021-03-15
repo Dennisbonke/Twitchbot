@@ -65,7 +65,7 @@ void Bot::run() {
         conn->read(buffer, sizeof(buffer) - 1);
         message_buffer.append(buffer);
         async::run(process_messages(message_buffer), async::current_queue);
-        check_timers();
+        async::run(check_timers(), async::current_queue);
         message_buffer.erase();
     }
 }
@@ -102,10 +102,11 @@ async::result<void> Bot::process_messages(std::string &msg) {
     co_return;
 }
 
-void Bot::check_timers() {
+async::result<void> Bot::check_timers() {
     for(auto const &[channel, handler] : timerhandlers) {
         handler->calc_timer();
     }
+    co_return;
 }
 
 std::string Bot::is_username() {
