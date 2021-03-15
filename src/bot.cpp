@@ -127,6 +127,10 @@ std::string Bot::is_prefix(const std::string &channel) {
     return prefixes.at(channel);
 }
 
+std::string Bot::is_timer_file(const std::string &channel) {
+    return timerhandlers.at(channel)->is_timer_file();
+}
+
 void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) {
     prefixes.at(channel) = new_prefix;
 }

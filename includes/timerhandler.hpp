@@ -20,4 +20,4 @@ class TimerHandler {
         Bot *bot;
 };
 
-#endif
+#endif //_timerhandler_h
