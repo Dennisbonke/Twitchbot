@@ -27,6 +27,7 @@ class Bot {
         bool is_channel(const std::string &);
         bool is_owner(const std::string &);
         std::string is_prefix(const std::string &);
+        std::string is_timer_file(const std::string &);
         void new_prefix(const std::string &, const std::string &);
         CommandHandler * is_commandhandler(const std::string &);
 
