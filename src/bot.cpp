@@ -4,6 +4,14 @@
 #include "../includes/timerhandler.hpp"
 #include <iostream>
 
+/**
+ * @brief Construct a new Bot:: Bot object
+ * 
+ * @param _username 
+ * @param _channels 
+ * @param prefix 
+ * @param _conn 
+ */
 Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string prefix, sockpp::tcp_connector *_conn) 
     : username{_username}, channels{_channels}, conn{_conn}, owner{_username} {
         for(auto &__channels : _channels) {
@@ -14,10 +22,19 @@ Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string 
         parser = new Parser(this);
     }
 
+/**
+ * @brief Destroy the Bot:: Bot object
+ * 
+ */
 Bot::~Bot() {
     delete parser;
 }
 
+/**
+ * @brief Lets the bot log in to the TMI servers with a given oauth code
+ * 
+ * @param password 
+ */
 void Bot::log_in(std::string password) {
     std::string pass_msg, nick_msg, user_msg, join_msg;
 
@@ -45,6 +62,10 @@ void Bot::log_in(std::string password) {
     }
 }
 
+/**
+ * @brief Lets the bot log out at the TMI servers
+ * 
+ */
 void Bot::log_out() {
     for(auto &channel : channels) {
         std::string part_msg = "PART #";
@@ -54,6 +75,10 @@ void Bot::log_out() {
     send_server_message("QUIT :Bot is shutting down");
 }
 
+/**
+ * @brief the main program loop with async handling of incoming messages and timers
+ * 
+ */
 void Bot::run() {
     std::string message_buffer;
     async::run_queue rq;
@@ -70,6 +95,12 @@ void Bot::run() {
     }
 }
 
+/**
+ * @brief sends a message to the chat of the given channel
+ * 
+ * @param msg 
+ * @param channel 
+ */
 void Bot::send_chat_message(const std::string &msg, const std::string &channel) {
     std::string send_msg{"PRIVMSG #"};
     send_msg.append(channel);
@@ -78,6 +109,11 @@ void Bot::send_chat_message(const std::string &msg, const std::string &channel) 
     send_server_message(send_msg);
 }
 
+/**
+ * @brief sends a message to the TMI server
+ * 
+ * @param msg 
+ */
 void Bot::send_server_message(const std::string &msg) {
     std::string server_msg{msg};
     server_msg.append("\r\n");
@@ -88,6 +124,12 @@ void Bot::send_server_message(const std::string &msg) {
     }
 }
 
+/**
+ * @brief this is an async version to process messages that were recieved by the bot
+ * 
+ * @param msg 
+ * @return async::result<void> 
+ */
 async::result<void> Bot::process_messages(std::string &msg) {
     while (true) {
         std::size_t lineBreakPos = msg.find("\r\n");
@@ -102,6 +144,11 @@ async::result<void> Bot::process_messages(std::string &msg) {
     co_return;
 }
 
+/**
+ * @brief handles the timers of each channel
+ * 
+ * @return async::result<void> 
+ */
 async::result<void> Bot::check_timers() {
     for(auto const &[channel, handler] : timerhandlers) {
         handler->calc_timer();
@@ -109,10 +156,22 @@ async::result<void> Bot::check_timers() {
     co_return;
 }
 
+/**
+ * @brief just to give back the username of this bot
+ * 
+ * @return std::string 
+ */
 std::string Bot::is_username() {
     return username;
 }
 
+/**
+ * @brief checks if the given user is a channel in the list
+ * 
+ * @param channel 
+ * @return true 
+ * @return false 
+ */
 bool Bot::is_channel(const std::string &channel) {
     // TODO: better check
     for(auto &_channel : channels) {
@@ -122,20 +181,45 @@ bool Bot::is_channel(const std::string &channel) {
     return false;
 }
 
+/**
+ * @brief checks if the user is the bot owner
+ * 
+ * @param _owner 
+ * @return true 
+ * @return false 
+ */
 bool Bot::is_owner(const std::string &_owner) {
     if(!strcmp(_owner.c_str(), owner.c_str()))
         return true;
     return false;
 }
 
+/**
+ * @brief returns the prefix for a channel
+ * 
+ * @param channel 
+ * @return std::string 
+ */
 std::string Bot::is_prefix(const std::string &channel) {
     return prefixes.at(channel);
 }
 
+/**
+ * @brief changes the prefix of a channel
+ * 
+ * @param new_prefix 
+ * @param channel 
+ */
 void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) {
     prefixes.at(channel) = new_prefix;
 }
 
+/**
+ * @brief gets the commandhandler of a given channel
+ * 
+ * @param _channel 
+ * @return CommandHandler* 
+ */
 CommandHandler * Bot::is_commandhandler(const std::string &_channel) {
     for(auto const &[channel, handler] : commandhandlers) {
         if(!strcmp(channel.c_str(), _channel.c_str()))

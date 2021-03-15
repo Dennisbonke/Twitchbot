@@ -9,7 +9,7 @@
 /**
  * @brief Main program cycle where the socket and bot are created
  * 
- * @return int 
+ * @return int
  */
 
 int main(void) {
