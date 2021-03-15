@@ -1,6 +1,7 @@
 #include "../includes/bot.hpp"
 #include "../includes/parser.hpp"
 #include "../includes/commandhandler.hpp"
+#include "../includes/timerhandler.hpp"
 #include <iostream>
 
 Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string prefix, sockpp::tcp_connector *_conn) 
@@ -8,6 +9,7 @@ Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string 
         for(auto &__channels : _channels) {
             prefixes.insert(std::pair<std::string, std::string>(__channels, prefix));
             commandhandlers.insert(std::pair<std::string, CommandHandler *>(__channels, new CommandHandler(this)));
+            timerhandlers.insert(std::pair<std::string, TimerHandler *>(__channels, new TimerHandler(__channels, this)));
         }
         parser = new Parser(this);
     }
@@ -61,6 +63,7 @@ void Bot::run() {
         conn->read(buffer, sizeof(buffer) - 1);
         message_buffer.append(buffer);
         process_messages(message_buffer);
+        check_timers();
     }
 }
 
@@ -95,6 +98,12 @@ void Bot::process_messages(std::string &msg) {
     }
 }
 
+void Bot::check_timers() {
+    for(auto const &[channel, handler] : timerhandlers) {
+        handler->calc_timer();
+    }
+}
+
 std::string Bot::is_username() {
     return username;
 }
@@ -122,10 +131,10 @@ void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) 
     prefixes.at(channel) = new_prefix;
 }
 
-CommandHandler * Bot::is_commandhandler(const std::string &channel) {
-    for(auto const& [key, val] : commandhandlers) {
-        if(!strcmp(key.c_str(), channel.c_str()))
-            return val;
+CommandHandler * Bot::is_commandhandler(const std::string &_channel) {
+    for(auto const &[channel, handler] : commandhandlers) {
+        if(!strcmp(channel.c_str(), _channel.c_str()))
+            return handler;
     }
     return nullptr;
 }
