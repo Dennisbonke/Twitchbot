@@ -6,6 +6,12 @@
 #include <vector>
 #include "includes/bot.hpp"
 
+/**
+ * @brief Main program cycle where the socket and bot are created
+ * 
+ * @return int 
+ */
+
 int main(void) {
     std::string host = "irc.chat.twitch.tv";
     in_port_t port = 6667;
@@ -16,12 +22,11 @@ int main(void) {
     std::fstream config_file, channel_file;
     std::string oauthcode;
     std::vector<std::string> channels;
-    config_file.open("config.txt", std::ios::in);
+    config_file.open("files/config/config.txt", std::ios::in);
 	if (!config_file) {
-		std::cerr << "No such file" << std::endl;
+		std::cerr << "No config.txt file" << std::endl;
 	} else {
 		char ch;
-
 		while (1) {
 			config_file >> ch;
 			if (config_file.eof())
@@ -31,10 +36,18 @@ int main(void) {
 	}
 	config_file.close();
 
-    channels.push_back("westlanderz");
-    channels.push_back("smurfingisbae");
+    channel_file.open("files/config/channels.txt", std::ios::in);
+    if(!channel_file) {
+        std::cerr << "No channels.txt file" << std::endl;
+    } else {
+        std::string line;
+        while(std::getline(channel_file, line)) {
+            channels.push_back(line);
+        }
+    }
+    channel_file.close();
 
-    Bot *bot = new Bot("westlanderz", channels, "!", conn);
+    Bot *bot = new Bot("Westlanderz", channels, "!", conn);
 
     try{
         bot->log_in(oauthcode);

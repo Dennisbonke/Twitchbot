@@ -1,11 +1,11 @@
-#ifndef _change_prefix_h
-#define _change_prefix_h
+#ifndef _editresult_h
+#define _editresult_h
 
 #include "../command.hpp"
 
-class ChangePrefixCommand : public Command {
+class EditresultCommand : public Command {
     public:
-        ChangePrefixCommand(Bot *);
+        EditresultCommand(std::vector<Command *>, Bot *);
 
         void execute(std::string, std::string, bool, bool, std::string) override;
         bool has_perms_to_run(bool, bool, std::string) override;
@@ -16,8 +16,8 @@ class ChangePrefixCommand : public Command {
 
     private:
         std::vector<std::string> names;
+        std::vector<Command *> commands;
         Bot *bot;
-        std::string result;
 };
 
-#endif //_change_prefix_h
+#endif //_editresult_h

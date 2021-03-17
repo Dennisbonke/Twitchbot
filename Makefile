@@ -1,14 +1,13 @@
 CXX = g++
 
 GDB = -ggdb
-CXXFLAGS = -std=c++2a -c -Wall -Wextra $(GDB)
+CXXFLAGS = -std=c++2a -c -Wall -Wextra $(GDB) -fcoroutines
 
 EXEC = twitchbot
-ODIR = build
 
 LIBS = -lsockpp
 
-OBJECTS = main.o bot.o parser.o commandhandler.o pingcommand.o changeprefix.o lurkcommand.o helpcommand.o
+OBJECTS = main.o bot.o timerhandler.o parser.o commandhandler.o pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o addtimer.o
 	
 
 all: $(EXEC)
@@ -20,13 +19,16 @@ $(EXEC): $(OBJECTS)
 main.o: main.cpp bot.o
 	$(CXX) $(CXXFLAGS) $<
 
-bot.o: src/bot.cpp parser.o
+bot.o: src/bot.cpp parser.o timerhandler.o commandhandler.o
+	$(CXX) $(CXXFLAGS) $<
+
+timerhandler.o: src/timerhandler.cpp
 	$(CXX) $(CXXFLAGS) $<
 
 parser.o: src/parser.cpp commandhandler.o
 	$(CXX) $(CXXFLAGS) $<
 
-commandhandler.o: src/commandhandler.cpp pingcommand.o changeprefix.o lurkcommand.o helpcommand.o
+commandhandler.o: src/commandhandler.cpp pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o addtimer.o
 	$(CXX) $(CXXFLAGS) $<
 
 pingcommand.o: src/commands/pingcommand.cpp
@@ -39,6 +41,12 @@ lurkcommand.o: src/commands/lurkcommand.cpp
 	$(CXX) $(CXXFLAGS) $<
 
 helpcommand.o: src/commands/helpcommand.cpp
+	$(CXX) $(CXXFLAGS) $<
+
+editresult.o: src/commands/editresult.cpp
+	$(CXX) $(CXXFLAGS) $<
+
+addtimer.o: src/commands/addtimer.cpp
 	$(CXX) $(CXXFLAGS) $<
 
 # Phony targets:

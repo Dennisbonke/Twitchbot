@@ -1,11 +1,22 @@
 #include "../includes/bot.hpp"
 #include "../includes/parser.hpp"
+#include "../includes/commandhandler.hpp"
+#include "../includes/timerhandler.hpp"
 #include <iostream>
 
-Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string _prefix, sockpp::tcp_connector *_conn) 
-    : username{_username}, channels{_channels}, prefix{_prefix}, conn{_conn} {}
+Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string prefix, sockpp::tcp_connector *_conn) 
+    : username{_username}, channels{_channels}, conn{_conn}, owner{_username} {
+        for(auto &__channels : _channels) {
+            prefixes.insert(std::pair<std::string, std::string>(__channels, prefix));
+            commandhandlers.insert(std::pair<std::string, CommandHandler *>(__channels, new CommandHandler(this)));
+            timerhandlers.insert(std::pair<std::string, TimerHandler *>(__channels, new TimerHandler(__channels, this)));
+        }
+        parser = new Parser(this);
+    }
 
-Bot::~Bot() {}
+Bot::~Bot() {
+    delete parser;
+}
 
 void Bot::log_in(std::string password) {
     std::string pass_msg, nick_msg, user_msg, join_msg;
@@ -45,14 +56,17 @@ void Bot::log_out() {
 
 void Bot::run() {
     std::string message_buffer;
+    async::run_queue rq;
+	async::queue_scope qs{&rq};
 
     // send_chat_message("Hi Chat, its Westlanderz chatbot right here talking....");
-
     while(true) {
         char buffer[513] = {};
         conn->read(buffer, sizeof(buffer) - 1);
         message_buffer.append(buffer);
-        process_messages(message_buffer);
+        async::run(process_messages(message_buffer), async::current_queue);
+        async::run(check_timers(), async::current_queue);
+        message_buffer.erase();
     }
 }
 
@@ -74,37 +88,70 @@ void Bot::send_server_message(const std::string &msg) {
     }
 }
 
-void Bot::process_messages(std::string &msg) {
+async::result<void> Bot::process_messages(std::string &msg) {
     while (true) {
-        size_t lineBreakPos = msg.find("\r\n");
+        std::size_t lineBreakPos = msg.find("\r\n");
         if (lineBreakPos != std::string::npos) {
             std::string currLine(msg.substr(0, lineBreakPos));
             std::cout << currLine << std::endl;
             msg.erase(0, lineBreakPos + 2);
-            Parser *parser = new Parser(currLine, this);
-            parser->parse_server_message(prefix);
-            std::string cmd = parser->server_command();
-            if(!strcmp(cmd.c_str(), "PING")) {
-                send_server_message("PONG :tmi.twitch.tv");
-            }
-            delete parser;
+            parser->parse_server_message(currLine);
         } else
             break;
     }
+    co_return;
+}
+
+async::result<void> Bot::check_timers() {
+    for(auto const &[channel, handler] : timerhandlers) {
+        handler->calc_timer();
+    }
+    co_return;
 }
 
 std::string Bot::is_username() {
     return username;
 }
 
-std::vector<std::string> Bot::is_channel() {
-    return channels;
+bool Bot::is_channel(const std::string &channel) {
+    // TODO: better check
+    for(auto &_channel : channels) {
+        if(!strcmp(_channel.c_str(), channel.c_str()))
+            return  true;
+    }
+    return false;
 }
 
-std::string Bot::is_prefix() {
-    return prefix;
+bool Bot::is_owner(const std::string &_owner) {
+    if(!strcmp(_owner.c_str(), owner.c_str()))
+        return true;
+    return false;
 }
 
-void Bot::new_prefix(const std::string &new_prefix) {
-    prefix = new_prefix;
+std::string Bot::is_prefix(const std::string &channel) {
+    return prefixes.at(channel);
+}
+
+std::string Bot::is_timer_file(const std::string &channel) {
+    return timerhandlers.at(channel)->is_timer_file();
+}
+
+void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) {
+    prefixes.at(channel) = new_prefix;
+}
+
+CommandHandler * Bot::is_commandhandler(const std::string &_channel) {
+    for(auto const &[channel, handler] : commandhandlers) {
+        if(!strcmp(channel.c_str(), _channel.c_str()))
+            return handler;
+    }
+    return nullptr;
+}
+
+TimerHandler * Bot::is_timerhandler(const std::string &_channel) {
+    for(auto const &[channel, handler] : timerhandlers) {
+        if(!strcmp(channel.c_str(), _channel.c_str()))
+            return handler;
+    }
+    return nullptr;
 }
