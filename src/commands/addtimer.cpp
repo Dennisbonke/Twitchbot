@@ -1,4 +1,5 @@
 #include "../../includes/commands/addtimer.hpp"
+#include "../../includes/timerhandler.hpp"
 #include <fstream>
 #include <chrono>
 
@@ -31,9 +32,10 @@ void AddTimerCommand::execute(std::string sender, std::string original_msg, bool
                     std::string new_hours = std::to_string(local_times->tm_hour);
                     std::string new_mins = std::to_string(local_times->tm_min);
                     std::string new_time = new_hours.append(":").append(new_mins);
-                    new_timer = name.append(interval).append("Last send:").append(new_time).append(message);
+                    new_timer = name.append(interval).append(" Last send:").append(new_time).append(message).append("\n\n");
                     timer_file << new_timer;
                     timer_file.close();
+                    bot->is_timerhandler(channel)->add_timer();
                     bot->send_chat_message("Added the timer to the listed timers", channel);
                     return;
                 }
