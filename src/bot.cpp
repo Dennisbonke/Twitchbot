@@ -147,3 +147,11 @@ CommandHandler * Bot::is_commandhandler(const std::string &_channel) {
     }
     return nullptr;
 }
+
+TimerHandler * Bot::is_timerhandler(const std::string &_channel) {
+    for(auto const &[channel, handler] : timerhandlers) {
+        if(!strcmp(channel.c_str(), _channel.c_str()))
+            return handler;
+    }
+    return nullptr;
+}

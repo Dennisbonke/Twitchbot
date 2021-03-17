@@ -30,6 +30,7 @@ class Bot {
         std::string is_timer_file(const std::string &);
         void new_prefix(const std::string &, const std::string &);
         CommandHandler * is_commandhandler(const std::string &);
+        TimerHandler * is_timerhandler(const std::string &);
 
     private:
         std::string username;
