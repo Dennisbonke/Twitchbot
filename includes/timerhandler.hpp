@@ -11,6 +11,7 @@ class TimerHandler {
         virtual ~TimerHandler();
 
         void calc_timer();
+        void add_timer();
         std::string is_timer_file();
 
     private:
