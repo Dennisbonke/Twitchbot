@@ -5,18 +5,18 @@ PingCommand::PingCommand(Bot *_bot) : Command(), sub_only{false}, mod_only{false
     names.push_back("pong");
 }
 
-void PingCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub) {
-    bot->send_chat_message("This is the ping command");
+void PingCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
+    bot->send_chat_message("This is the ping command", channel);
 }
 
 bool PingCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
     if(mod_only) {
-        if(mod || sender == bot->is_channel())
+        if(mod)
             return true;
         else
             return false; 
     } else if(sub_only) {
-        if(sub || mod || sender == bot->is_channel())
+        if(sub || mod)
             return true;
         else
             return false; 

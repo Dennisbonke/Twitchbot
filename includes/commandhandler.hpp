@@ -11,7 +11,7 @@ class CommandHandler {
         virtual ~CommandHandler();
 
         void init_command_list();
-        void search_command(std::string, bool, bool, std::string, std::string);
+        void search_command(std::string, bool, bool, std::string, std::string, std::string);
 
     private:
         std::vector<Command *> available_commands;

@@ -43,6 +43,9 @@ helpcommand.o: src/commands/helpcommand.cpp
 
 # Phony targets:
 clean: # Remove all object files
+	rm $(wildcard *.o)
+
+veryclean:
 	rm $(EXEC) $(wildcard *.o)
 
 todo: # List all todo's
@@ -52,4 +55,4 @@ tree: # List the dependency tree
 	gcc -MM $(LIBS) *.[ch]pp
 
 # Set the phony targets
-.PHONY: clean todo tags
+.PHONY: clean veryclean todo tags

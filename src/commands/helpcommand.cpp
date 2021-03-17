@@ -5,7 +5,7 @@ HelpCommand::HelpCommand(std::vector<Command *> _commands, Bot *_bot) : Command(
     names.push_back("help");
 }
 
-void HelpCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub) {
+void HelpCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
     std::vector<Command *> allowed_commands;
     for(auto &command : commands) {
         if(command->has_perms_to_run(mod, sub, sender))
@@ -22,7 +22,7 @@ void HelpCommand::execute(std::string sender, std::string original_msg, bool mod
         }
         for(auto &command : allowed_commands) {
             if(!strcmp(command->list_command().c_str(), command_name.c_str()))
-                bot->send_chat_message(command->generate_help_message());
+                bot->send_chat_message(command->generate_help_message(), channel);
         }
     } else {
         std::string help_msg = "here is a list of commands you can run: ";
@@ -30,19 +30,19 @@ void HelpCommand::execute(std::string sender, std::string original_msg, bool mod
             help_msg.append(command->list_command());
             help_msg.append(", ");
         }
-        help_msg.append(". Try !help " + names[0] + "to learn more about one of them. Version: 1.0.0 https://github.com/Westlanderz/TwitchBot");
-        bot->send_chat_message(help_msg);
+        help_msg.append(". Try !help " + names[0] + " to learn more about one of them. Version: 1.0.0 https://github.com/Westlanderz/TwitchBot");
+        bot->send_chat_message(help_msg, channel);
     }
 }
 
 bool HelpCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
     if(mod_only) {
-        if(mod || sender == bot->is_channel())
+        if(mod)
             return true;
         else
             return false; 
     } else if(sub_only) {
-        if(sub || mod || sender == bot->is_channel())
+        if(sub || mod)
             return true;
         else
             return false; 
