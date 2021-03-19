@@ -46,7 +46,7 @@ helpcommand.o: src/commands/helpcommand.cpp
 editresult.o: src/commands/editresult.cpp
 	$(CXX) $(CXXFLAGS) $<
 
-addtimer.o: src/commands/addtimer.cpp
+addtimer.o: src/commands/addtimer.cpp timerhandler.o
 	$(CXX) $(CXXFLAGS) $<
 
 # Phony targets:
