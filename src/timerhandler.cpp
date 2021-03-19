@@ -104,7 +104,6 @@ void TimerHandler::calc_timer() {
     output.open(timer_file, std::ios::out);
     if(!output) {
         std::cerr << "No file excists" << std::endl;
-        throw std::runtime_error("NO FILE");
     } else {
         for(auto &_timer : timers_to_write) {
             output << _timer;
