@@ -15,6 +15,13 @@ Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string 
     }
 
 Bot::~Bot() {
+    for(auto &channel : channels) {
+        delete commandhandlers.at(channel);
+        delete timerhandlers.at(channel);
+    }
+    prefixes.clear();
+    commandhandlers.clear();
+    timerhandlers.clear();
     delete parser;
 }
 

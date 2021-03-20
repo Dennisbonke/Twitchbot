@@ -20,8 +20,7 @@ TimerHandler::TimerHandler(std::string _channel, Bot *_bot)
             std::string new_mins = std::to_string(local_times->tm_min);
             std::string new_time = new_hours.append(":").append(new_mins);
             tmp.append(new_time)
-                .append(" ")
-                .append("Message:Check out westlanderz at github for more projects, you can DM him with questions on discord SenpaiR6#1717 \n\n");
+                .append(" Message:Check out westlanderz at github for more projects, you can DM him with questions on discord SenpaiR6#1717 \n\n");
             file << tmp;
         }
         file.close();
@@ -105,7 +104,6 @@ void TimerHandler::calc_timer() {
     output.open(timer_file, std::ios::out);
     if(!output) {
         std::cerr << "No file excists" << std::endl;
-        throw std::runtime_error("NO FILE");
     } else {
         for(auto &_timer : timers_to_write) {
             output << _timer;
