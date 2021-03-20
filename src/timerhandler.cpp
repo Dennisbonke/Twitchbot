@@ -25,34 +25,40 @@ TimerHandler::~TimerHandler() {}
 
 void TimerHandler::calc_timer() {
     std::fstream timers;
+    std::string tmp_result{""};
+    std::vector<std::string> timers_string;
+    std::vector<std::string> timers_to_write;
     timers.open(timer_file, std::ios::in);
     if (!timers) {
 		std::cerr << "No timer file for this channel file" << std::endl;
 	} else {
         if(amount_timers != 0) {
-            for(int i = 1; i <= amount_timers; i++){
-                std::string timer;
-                std::string line;
-                while(std::getline(timers, line)) {
-                    if(!strcmp(line.c_str(), "\r\n") || !strcmp(line.c_str(), "\n\r") || !strcmp(line.c_str(), "\n"))
-                        break;
+            std::string timer;
+            std::string line;
+            while(std::getline(timers, line)) {
+                if(line.empty()) {
+                    timers_string.push_back(timer);
+                    timer.clear();
+                } else {
                     timer.append(line);
                 }
-                std::size_t find_name = timer.find("\r\n");
-                if(find_name != std::string::npos){
-                    std::string timer_name = timer.substr(5, find_name - 5);
-                    timer.erase(0, find_name + 3);
-                    std::size_t find_interval = timer.find("\r\n");
+            }
+            timers.close();
+            for(auto &_timer : timers_string) {
+                std::size_t find_name = _timer.find(":");
+                std::size_t end_name = _timer.find(" ");
+                if(find_name != std::string::npos) {
+                    std::size_t find_interval = _timer.find(":", find_name + 1);
+                    std::size_t end_interval = _timer.find(" ", find_interval + 1);
                     if(find_interval != std::string::npos) {
-                        std::string timer_interval = timer.substr(9, find_interval - 9);
-                        timer.erase(0, find_interval + 3);
-                        std::size_t find_last_send = timer.find("\r\n");
+                        std::string timer_name = _timer.substr(find_name + 1, end_name - find_name - 1);
+                        std::size_t find_last_send = _timer.find(":", find_interval + 1);
                         if(find_last_send != std::string::npos) {
-                            std::string timer_last_send = timer.substr(10, find_last_send - 10);
-                            timer.erase(0, find_last_send + 3);
-                            std::size_t find_message = timer.find("\r\n");
+                            std::string timer_interval = _timer.substr(find_interval + 1, end_interval - find_interval - 1);
+                            std::string timer_last_send = _timer.substr(find_last_send + 1, 5);
+                            std::size_t find_message = _timer.find(":", find_last_send + 5);
                             if(find_message != std::string::npos) {
-                                std::string message = timer.substr(8, find_message - 8);
+                                std::string message = _timer.substr(find_message + 1);
                                 int interval = std::stoi(timer_interval);
                                 auto now = std::chrono::system_clock::now();
                                 time_t ttime = std::chrono::system_clock::to_time_t(now);
@@ -61,7 +67,7 @@ void TimerHandler::calc_timer() {
                                 int hour = local_time->tm_hour;
                                 int mins = std::stoi(timer_last_send.substr(timer_last_send.find(":") + 1, 2));
                                 int hours = std::stoi(timer_last_send.substr(timer_last_send.find(":") - 2, 2));
-                                if((hour * 60 + min) > (hours * 60 + mins + interval)) {
+                                if((hour * 60 + min) > (hours * 60 + mins + interval) || (hour == 0 && min < 5)) {
                                     bot->send_chat_message(message, channel);
                                     auto now = std::chrono::system_clock::now();
                                     time_t times = std::chrono::system_clock::to_time_t(now);
@@ -69,32 +75,36 @@ void TimerHandler::calc_timer() {
                                     std::string new_hours = std::to_string(local_times->tm_hour);
                                     std::string new_mins = std::to_string(local_times->tm_min);
                                     std::string new_time = new_hours.append(":").append(new_mins);
-                                    timer.clear();
-                                    while(!timers.eof()) {
-                                        std::getline(timers, line);
-                                        std::size_t find_timer = line.find(timer_last_send);
-                                        if(find_timer != std::string::npos) {
-                                            timer.append("Last send:").append(new_time);
-                                        } else {
-                                            timer.append(line);
-                                        }
-                                    }
-                                    timers.close();
-                                    std::fstream output_file;
-                                    output_file.open(timer_file, std::ios::trunc | std::ios::out);
-                                    if (!output_file) {
-                                        std::cerr << "No timer file for this channel file" << std::endl;
-                                    } else {
-                                        output_file << timer;
-                                    }
+                                    tmp_result.append(_timer.substr(0, _timer.find("Last send:") + 10));
+                                    tmp_result.append(new_time)
+                                        .append(" Message:")
+                                        .append(message)
+                                        .append("\n\n");
+                                } else {
+                                    tmp_result.append(_timer + "\n\n");
                                 }
                             }
                         }
                     }
                 }
+                timers_to_write.push_back(tmp_result);
+                tmp_result.clear();
             }
         }
     }
+    if(timers.is_open())
+        timers.close();
+
+    std::fstream output;
+    output.open(timer_file, std::ios::out);
+    if(!output) {
+        std::cerr << "No file excists" << std::endl;
+    } else {
+        for(auto &_timer : timers_to_write) {
+            output << _timer;
+        }
+    }
+    output.close();
 }
 
 std::string TimerHandler::is_timer_file() {
