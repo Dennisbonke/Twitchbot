@@ -49,13 +49,8 @@ void EditTimerCommand::execute(std::string sender, std::string original_msg, boo
                                         auto now = std::chrono::system_clock::now();
                                         time_t ttime = std::chrono::system_clock::to_time_t(now);
                                         tm *local_time = localtime(&ttime);
-                                        int min = local_time->tm_min;
-                                        int hour = local_time->tm_hour;
-                                        auto now = std::chrono::system_clock::now();
-                                        time_t times = std::chrono::system_clock::to_time_t(now);
-                                        tm *local_times = localtime(&times);
-                                        std::string new_hours = std::to_string(local_times->tm_hour);
-                                        std::string new_mins = std::to_string(local_times->tm_min);
+                                        std::string new_hours = std::to_string(local_time->tm_hour);
+                                        std::string new_mins = std::to_string(local_time->tm_min);
                                         std::string new_time = new_hours.append(":").append(new_mins);
                                         tmp_result.append(_timer.substr(0, _timer.find("Last send:") + 10));
                                         tmp_result.append(new_time)

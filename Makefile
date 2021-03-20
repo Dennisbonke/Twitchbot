@@ -49,7 +49,7 @@ editresult.o: src/commands/editresult.cpp
 addtimer.o: src/commands/addtimer.cpp timerhandler.o
 	$(CXX) $(CXXFLAGS) $<
 
-edittimer.o: src/commands/addtimer.cpp
+edittimer.o: src/commands/edittimer.cpp
 	$(CXX) $(CXXFLAGS) $<
 
 # Phony targets:
