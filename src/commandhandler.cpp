@@ -6,6 +6,7 @@
 #include "../includes/commands/helpcommand.hpp"
 #include "../includes/commands/editresult.hpp"
 #include "../includes/commands/addtimer.hpp"
+#include "../includes/commands/edittimer.hpp"
 
 CommandHandler::CommandHandler(Bot *_bot) : bot{_bot} {
     init_command_list();
@@ -17,11 +18,11 @@ CommandHandler::~CommandHandler() {
 }
 
 void CommandHandler::init_command_list() {
-    // TODO: add a Help/Commands command, add a ChangePrefix command
     available_commands.push_back(new PingCommand(bot));
     available_commands.push_back(new ChangePrefixCommand(bot));
     available_commands.push_back(new LurkCommand(bot));
     available_commands.push_back(new AddTimerCommand(bot));
+    available_commands.push_back(new EditTimerCommand(bot));
     available_commands.push_back(new EditresultCommand(available_commands, bot));
     available_commands.push_back(new HelpCommand(available_commands, bot));
 }
