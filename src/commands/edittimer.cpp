@@ -90,3 +90,28 @@ void EditTimerCommand::execute(std::string sender, std::string original_msg, boo
     else
         bot->send_chat_message("Could not find the timer you were looking for " + sender + " please make sure you have written the name correctly", channel);
 }
+
+bool EditTimerCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
+    if(mod || bot->is_channel(sender) || bot->is_owner(sender))
+        return true;
+    return false;
+}
+
+bool EditTimerCommand::find_name(std::string command_name) {
+    for(auto it = names.begin(); it != names.end(); it++) {
+        if(!strcmp(it->data(), command_name.c_str()))
+            return true;
+    }
+    return false;
+}
+
+std::string EditTimerCommand::list_command() {
+    return names[0];
+}
+
+std::string EditTimerCommand::generate_help_message(const std::string &channel) {
+    return "Use " + bot->is_prefix(channel) + names[0] + " [name] [message] to edit a timed message from this channel.";
+}
+
+void EditTimerCommand::new_output(std::string _result) {}
+
