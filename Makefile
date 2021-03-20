@@ -7,7 +7,7 @@ EXEC = twitchbot
 
 LIBS = -lsockpp
 
-OBJECTS = main.o bot.o timerhandler.o parser.o commandhandler.o pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o addtimer.o
+OBJECTS = main.o bot.o timerhandler.o parser.o commandhandler.o pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o addtimer.o edittimer.o
 	
 
 all: $(EXEC)
@@ -28,7 +28,7 @@ timerhandler.o: src/timerhandler.cpp
 parser.o: src/parser.cpp commandhandler.o
 	$(CXX) $(CXXFLAGS) $<
 
-commandhandler.o: src/commandhandler.cpp pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o addtimer.o
+commandhandler.o: src/commandhandler.cpp pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o addtimer.o edittimer.o
 	$(CXX) $(CXXFLAGS) $<
 
 pingcommand.o: src/commands/pingcommand.cpp
@@ -47,6 +47,9 @@ editresult.o: src/commands/editresult.cpp
 	$(CXX) $(CXXFLAGS) $<
 
 addtimer.o: src/commands/addtimer.cpp timerhandler.o
+	$(CXX) $(CXXFLAGS) $<
+
+edittimer.o: src/commands/addtimer.cpp
 	$(CXX) $(CXXFLAGS) $<
 
 # Phony targets:
