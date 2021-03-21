@@ -32,7 +32,7 @@ void HelpCommand::execute(std::string sender, std::string original_msg, bool mod
             help_msg.append(command->list_command());
             help_msg.append(", ");
         }
-        help_msg.append(". Try " + bot->is_prefix(channel) +  "help " + names[0] + " to learn more about one of them. Version: 1.0.1-beta https://github.com/Westlanderz/TwitchBot");
+        help_msg.append(". Try " + bot->is_prefix(channel) +  "help " + names[0] + " to learn more about one of them. Version: 1.2.2-beta https://github.com/Westlanderz/TwitchBot");
         bot->send_chat_message(help_msg, channel);
     }
 }
