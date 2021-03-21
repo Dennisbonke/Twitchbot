@@ -7,10 +7,10 @@
 /**
  * @brief Construct a new Bot:: Bot object
  * 
- * @param _username 
- * @param _channels 
- * @param prefix 
- * @param _conn 
+ * @param _username the username the bot will be having in chat
+ * @param _channels a list full of channels the bot is connecting to
+ * @param prefix the default prefix for all the channels
+ * @param _conn the connection to the server
  */
 Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string prefix, sockpp::tcp_connector *_conn) 
     : username{_username}, channels{_channels}, conn{_conn}, owner{_username} {
@@ -33,7 +33,7 @@ Bot::~Bot() {
 /**
  * @brief Lets the bot log in to the TMI servers with a given oauth code
  * 
- * @param password 
+ * @param password the oauth code used to log in to the TMI-servers
  */
 void Bot::log_in(std::string password) {
     std::string pass_msg, nick_msg, user_msg, join_msg;
@@ -98,8 +98,8 @@ void Bot::run() {
 /**
  * @brief sends a message to the chat of the given channel
  * 
- * @param msg 
- * @param channel 
+ * @param msg the message it needs to send to the chat
+ * @param channel the channel it needs to send the message to
  */
 void Bot::send_chat_message(const std::string &msg, const std::string &channel) {
     std::string send_msg{"PRIVMSG #"};
@@ -110,9 +110,9 @@ void Bot::send_chat_message(const std::string &msg, const std::string &channel) 
 }
 
 /**
- * @brief sends a message to the TMI server
+ * @brief sends a message to the TMI server, recommended to use send_chat_message to send a message in chat
  * 
- * @param msg 
+ * @param msg the full message that will be send to the server
  */
 void Bot::send_server_message(const std::string &msg) {
     std::string server_msg{msg};
@@ -127,8 +127,8 @@ void Bot::send_server_message(const std::string &msg) {
 /**
  * @brief this is an async version to process messages that were recieved by the bot
  * 
- * @param msg 
- * @return async::result<void> 
+ * @param msg the message that was recieved by the server
+ * @return async::result<void> its void but async from libasync
  */
 async::result<void> Bot::process_messages(std::string &msg) {
     while (true) {
@@ -147,7 +147,7 @@ async::result<void> Bot::process_messages(std::string &msg) {
 /**
  * @brief handles the timers of each channel
  * 
- * @return async::result<void> 
+ * @return async::result<void> its void but async from libasync
  */
 async::result<void> Bot::check_timers() {
     for(auto const &[channel, handler] : timerhandlers) {
@@ -159,7 +159,7 @@ async::result<void> Bot::check_timers() {
 /**
  * @brief just to give back the username of this bot
  * 
- * @return std::string 
+ * @return std::string the username of this bot
  */
 std::string Bot::is_username() {
     return username;
@@ -168,7 +168,7 @@ std::string Bot::is_username() {
 /**
  * @brief checks if the given user is a channel in the list
  * 
- * @param channel 
+ * @param channel the channel to compare to the connected channels
  * @return true 
  * @return false 
  */
@@ -184,7 +184,7 @@ bool Bot::is_channel(const std::string &channel) {
 /**
  * @brief checks if the user is the bot owner
  * 
- * @param _owner 
+ * @param _owner the sender of the command to check if its the bot owner
  * @return true 
  * @return false 
  */
@@ -197,8 +197,8 @@ bool Bot::is_owner(const std::string &_owner) {
 /**
  * @brief returns the prefix for a channel
  * 
- * @param channel 
- * @return std::string 
+ * @param channel the channel to check the prefix of
+ * @return std::string the prefix on that channel
  */
 std::string Bot::is_prefix(const std::string &channel) {
     return prefixes.at(channel);
@@ -207,8 +207,8 @@ std::string Bot::is_prefix(const std::string &channel) {
 /**
  * @brief changes the prefix of a channel
  * 
- * @param new_prefix 
- * @param channel 
+ * @param new_prefix the prefix to change to
+ * @param channel the channel to change the prefix of
  */
 void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) {
     prefixes.at(channel) = new_prefix;
@@ -217,8 +217,8 @@ void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) 
 /**
  * @brief gets the commandhandler of a given channel
  * 
- * @param _channel 
- * @return CommandHandler* 
+ * @param _channel the channel to get the handler of
+ * @return CommandHandler* the commandhandler to return
  */
 CommandHandler * Bot::is_commandhandler(const std::string &_channel) {
     for(auto const &[channel, handler] : commandhandlers) {

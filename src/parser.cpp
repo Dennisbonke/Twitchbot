@@ -2,18 +2,24 @@
 #include "../includes/commandhandler.hpp"
 #include <cstring>
 
+/**
+ * @brief Construct a new Parser:: Parser object
+ * 
+ * @param _bot a bot instance to send chat messages
+ */
 Parser::Parser(Bot *_bot) : bot{_bot} {}
 
+/**
+ * @brief Destroy the Parser:: Parser object
+ * 
+ */
 Parser::~Parser() {}
 
-bool Parser::is_command() {
-    return true;
-}
-
-bool Parser::is_ping_message() {
-    return false;
-}
-
+/**
+ * @brief Parse the message that was recieved by the server at the conn
+ * 
+ * @param server_message the messaage recieved by the server and needed to parse
+ */
 void Parser::parse_server_message(std::string server_message) {
     std::size_t find_ping = server_message.find("PING");
     if(find_ping != std::string::npos) {
