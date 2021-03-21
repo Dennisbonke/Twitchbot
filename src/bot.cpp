@@ -211,7 +211,12 @@ std::string Bot::is_prefix(const std::string &channel) {
     return prefixes.at(channel);
 }
 
-
+/**
+ * @brief gets the file location for a certain channel
+ * 
+ * @param channel the channel to get the timer file of
+ * @return std::string the file location for the channel
+ */
 std::string Bot::is_timer_file(const std::string &channel) {
     return timerhandlers.at(channel)->is_timer_file();
 }
