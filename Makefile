@@ -64,11 +64,5 @@ clean: # Remove all object files
 veryclean:
 	rm $(EXEC) $(wildcard *.o)
 
-todo: # List all todo's
-	grep -n "TODO:" *.[ch]pp
-
-tree: # List the dependency tree
-	gcc -MM $(LIBS) *.[ch]pp
-
 # Set the phony targets
-.PHONY: clean veryclean todo tags
+.PHONY: clean veryclean
