@@ -116,6 +116,10 @@ void TimerHandler::add_timer() {
     amount_timers++;
 }
 
+void TimerHandler::remove_timer() {
+    amount_timers--;
+}
+
 std::string TimerHandler::is_timer_file() {
     return timer_file;
 }
