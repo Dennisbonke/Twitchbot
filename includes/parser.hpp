@@ -8,8 +8,6 @@ class Parser {
         Parser(Bot *);
         virtual ~Parser();
 
-        bool is_command();
-        bool is_ping_message();
         void parse_server_message(std::string);
 
     private:
