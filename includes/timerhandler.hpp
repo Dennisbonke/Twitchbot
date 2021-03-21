@@ -12,6 +12,7 @@ class TimerHandler {
 
         void calc_timer();
         void add_timer();
+        void remove_timer();
         std::string is_timer_file();
 
     private:
