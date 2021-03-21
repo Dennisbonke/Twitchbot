@@ -27,6 +27,13 @@ Bot::Bot(std::string _username, std::vector<std::string> _channels, std::string 
  * 
  */
 Bot::~Bot() {
+    for(auto &channel : channels) {
+        delete commandhandlers.at(channel);
+        delete timerhandlers.at(channel);
+    }
+    prefixes.clear();
+    commandhandlers.clear();
+    timerhandlers.clear();
     delete parser;
 }
 
@@ -204,6 +211,11 @@ std::string Bot::is_prefix(const std::string &channel) {
     return prefixes.at(channel);
 }
 
+
+std::string Bot::is_timer_file(const std::string &channel) {
+    return timerhandlers.at(channel)->is_timer_file();
+}
+
 /**
  * @brief changes the prefix of a channel
  * 
@@ -222,6 +234,14 @@ void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) 
  */
 CommandHandler * Bot::is_commandhandler(const std::string &_channel) {
     for(auto const &[channel, handler] : commandhandlers) {
+        if(!strcmp(channel.c_str(), _channel.c_str()))
+            return handler;
+    }
+    return nullptr;
+}
+
+TimerHandler * Bot::is_timerhandler(const std::string &_channel) {
+    for(auto const &[channel, handler] : timerhandlers) {
         if(!strcmp(channel.c_str(), _channel.c_str()))
             return handler;
     }
