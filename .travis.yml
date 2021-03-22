@@ -5,7 +5,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-10
+      - gcc-10
 compiler:
   - gcc-10
 script:
