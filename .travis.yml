@@ -1,7 +1,12 @@
+os: linux
+dist: ubuntu
 language: cpp
-sudo: false
+sudo: required
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install gcc-10
 compiler:
-  - gcc
+  - gcc-10
 script:
   - make veryclean
   - make
