@@ -11,8 +11,5 @@ addons:
     packages:
       - gcc-10
       - g++-10
-install:
-# /usr/bin/gcc points to an older compiler on Linux.
-- if [ "$CXX" = "g++" ]; then export CXX="g++-10" CC="gcc-10"; fi
 script:
-  - sudo ./build.sh
+  - ./build.sh
