@@ -1,8 +1,8 @@
 os: linux
-dist: ubuntu
 language: cpp
 sudo: required
 before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
   - sudo apt-get update
   - sudo apt-get install gcc-10
 compiler:
