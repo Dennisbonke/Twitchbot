@@ -2,3 +2,6 @@ language: cpp
 sudo: false
 compiler:
   - gcc
+script:
+  - make veryclean
+  - make
