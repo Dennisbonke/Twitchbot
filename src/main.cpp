@@ -4,7 +4,7 @@
 #include <sockpp/tcp_connector.h>
 #include <fstream>
 #include <vector>
-#include "includes/bot.hpp"
+#include "../includes/bot.hpp"
 
 /**
  * @brief Main program cycle where the socket and bot are created
