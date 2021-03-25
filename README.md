@@ -1,7 +1,14 @@
 # Twitchbot
+Making a general purpose twitch chat bot.
 
-Making a general purpose twitch chat bot Compile by running make in the root folder, only works on linux or by just running the twitchbot executable.
+## Dependencies
+This bot is dependent on having [libsockpp](https://github.com/fpagliughi/sockpp), [libasync](https://github.com/managarm/libasync) and [frigg](https://github.com/managarm/frigg) installed. You can install libsockpp from your package manager if available, or alternatively compile it from source. For frigg and libasync one can copy the folders with the headers to `/usr/include`. To build the bot, `meson` and `ninja` are required as well, install these from your package manager.
 
-## Dependancies
-
-This bot is dependant on having both SOCKPP, LIBASYNC and FRIGG installed. You can find both with instructions on their respective repos: <https://github.com/fpagliughi/sockpp> <https://github.com/managarm/libasync> <https://github.com/managarm/frigg>
+## Compilation
+To compile this project, run the following commands
+```
+- mkdir build
+- cd build
+- meson ..
+- ninja
+```
