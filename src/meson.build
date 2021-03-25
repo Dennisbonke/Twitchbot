@@ -1,0 +1,16 @@
+executable('twitchbot',
+        ['bot.cpp',
+        'commandhandler.cpp',
+        'main.cpp',
+        'parser.cpp',
+        'timerhandler.cpp',
+        'commands/addtimer.cpp',
+        'commands/changeprefix.cpp',
+        'commands/editresult.cpp',
+        'commands/edittimer.cpp',
+        'commands/helpcommand.cpp',
+        'commands/lurkcommand.cpp',
+        'commands/pingcommand.cpp',
+        'commands/removetimer.cpp',
+        ]
+    )
