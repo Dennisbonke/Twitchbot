@@ -37,7 +37,7 @@ void HelpCommand::execute(std::string sender, std::string original_msg, bool mod
     }
 }
 
-bool HelpCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
+bool HelpCommand::has_perms_to_run(bool, bool, std::string) {
     return true;
 }
 
@@ -53,8 +53,8 @@ std::string HelpCommand::list_command() {
     return names[0];
 }
 
-std::string HelpCommand::generate_help_message(const std::string &channel) {
+std::string HelpCommand::generate_help_message(const std::string &) {
     return "I think you know how to use this command.....";
 }
 
-void HelpCommand::new_output(std::string _result) {}
+void HelpCommand::new_output(std::string) {}

@@ -6,7 +6,7 @@ PingCommand::PingCommand(Bot *_bot) : Command(), bot{_bot} {
     result = "This is the ping command ${sender}";
 }
 
-void PingCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
+void PingCommand::execute(std::string sender, std::string, bool, bool, std::string channel) {
     std::string new_result{""};
     std::size_t find_param_result = result.find("${sender}");
     if(find_param_result != std::string::npos) {
@@ -18,7 +18,7 @@ void PingCommand::execute(std::string sender, std::string original_msg, bool mod
     bot->send_chat_message(new_result, channel);
 }
 
-bool PingCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
+bool PingCommand::has_perms_to_run(bool, bool, std::string) {
     return true;
 }
 

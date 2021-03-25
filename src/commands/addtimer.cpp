@@ -7,7 +7,7 @@ AddTimerCommand::AddTimerCommand(Bot *_bot) : bot{_bot} {
     names.push_back("addtimer");
 }
 
-void AddTimerCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
+void AddTimerCommand::execute(std::string, std::string original_msg, bool, bool, std::string channel) {
     std::string file = bot->is_timer_file(channel);
     std::fstream timer_file;
     std::string new_timer{""};
@@ -45,7 +45,7 @@ void AddTimerCommand::execute(std::string sender, std::string original_msg, bool
     bot->send_chat_message("Please provide all the arguments to the timer. For more info use !help addtimer", channel);
 }
 
-bool AddTimerCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
+bool AddTimerCommand::has_perms_to_run(bool mod, bool, std::string sender) {
     if(mod || bot->is_channel(sender) || bot->is_owner(sender))
         return true;
     return false;
@@ -67,4 +67,4 @@ std::string AddTimerCommand::generate_help_message(const std::string &channel) {
     return "Use " + bot->is_prefix(channel) + names[0] + " [name] [interval (min)] [message] to add a timed message to this channel.";
 }
 
-void AddTimerCommand::new_output(std::string _result) {}
+void AddTimerCommand::new_output(std::string) {}

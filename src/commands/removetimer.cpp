@@ -8,7 +8,7 @@ RemoveTimerCommand::RemoveTimerCommand(Bot *_bot) : bot{_bot} {
     names.push_back("rmtimer");
 }
 
-void RemoveTimerCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
+void RemoveTimerCommand::execute(std::string, std::string original_msg, bool, bool, std::string channel) {
     std::string file = bot->is_timer_file(channel);
     std::fstream timers;
     std::string tmp_result{""};
@@ -62,7 +62,7 @@ void RemoveTimerCommand::execute(std::string sender, std::string original_msg, b
     output.close();
 }
 
-bool RemoveTimerCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
+bool RemoveTimerCommand::has_perms_to_run(bool mod, bool, std::string sender) {
     if(mod || bot->is_channel(sender) || bot->is_owner(sender))
         return true;
     return false;
@@ -84,4 +84,4 @@ std::string RemoveTimerCommand::generate_help_message(const std::string &channel
     return "Use " + bot->is_prefix(channel) + names[0] + " [name] to remove a timed message from this channel.";
 }
 
-void RemoveTimerCommand::new_output(std::string _result) {}
+void RemoveTimerCommand::new_output(std::string) {}

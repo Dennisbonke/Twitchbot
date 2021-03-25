@@ -5,7 +5,7 @@ EditresultCommand::EditresultCommand(std::vector<Command *> _commands, Bot *_bot
     names.push_back("edit");
 }
 
-void EditresultCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
+void EditresultCommand::execute(std::string sender, std::string original_msg, bool, bool, std::string channel) {
     std::size_t find_command = original_msg.find(" ");
     if(find_command != std::string::npos) {
         std::string commandname{""};
@@ -35,7 +35,7 @@ void EditresultCommand::execute(std::string sender, std::string original_msg, bo
     }
 }
 
-bool EditresultCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
+bool EditresultCommand::has_perms_to_run(bool mod, bool, std::string sender) {
     if(mod || bot->is_channel(sender) || bot->is_owner(sender))
         return true;
     return false;
@@ -57,4 +57,4 @@ std::string EditresultCommand::generate_help_message(const std::string &channel)
     return "Use " + bot->is_prefix(channel) + names[0] + " [command] [new-result] to change the output of that command.";
 }
 
-void EditresultCommand::new_output(std::string _result) {}
+void EditresultCommand::new_output(std::string) {}

@@ -6,7 +6,7 @@ ChangePrefixCommand::ChangePrefixCommand(Bot *_bot) : Command(), bot{_bot} {
     names.push_back("change_prefix");
 }
 
-void ChangePrefixCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
+void ChangePrefixCommand::execute(std::string, std::string original_msg, bool, bool, std::string channel) {
     std::string new_prefix;
     std::size_t find_prefix = original_msg.find(" ");
     if(find_prefix != std::string::npos) {
@@ -25,7 +25,7 @@ void ChangePrefixCommand::execute(std::string sender, std::string original_msg, 
     }
 }
 
-bool ChangePrefixCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
+bool ChangePrefixCommand::has_perms_to_run(bool, bool, std::string sender) {
     if(bot->is_channel(sender) || bot->is_owner(sender))
         return true;
     return false; 
@@ -47,4 +47,4 @@ std::string ChangePrefixCommand::generate_help_message(const std::string &channe
     return "Use " + bot->is_prefix(channel) + names[0] + " [prefix] to change the prefix of this bot.";
 }
 
-void ChangePrefixCommand::new_output(std::string _result) {}
+void ChangePrefixCommand::new_output(std::string) {}

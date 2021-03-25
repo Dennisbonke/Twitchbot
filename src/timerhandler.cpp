@@ -88,7 +88,7 @@ void TimerHandler::calc_timer() {
                                 int hours = std::stoi(timer_last_send.substr(timer_last_send.find(":") - 2, 2));
                                 if((hour * 60 + min) > (hours * 60 + mins + interval) || (hour == 0 && min < 5)) {
                                     bot->send_chat_message(message, channel);
-                                    auto now = std::chrono::system_clock::now();
+                                    now = std::chrono::system_clock::now();
                                     time_t times = std::chrono::system_clock::to_time_t(now);
                                     tm *local_times = localtime(&times);
                                     std::string new_hours = std::to_string(local_times->tm_hour);

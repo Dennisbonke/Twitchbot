@@ -235,7 +235,7 @@ void Bot::new_prefix(const std::string &new_prefix, const std::string &channel) 
  * @brief gets the commandhandler of a given channel
  * 
  * @param _channel the channel to get the handler of
- * @return CommandHandler* the commandhandler to return
+ * @return CommandHandler * the commandhandler to return
  */
 CommandHandler * Bot::is_commandhandler(const std::string &_channel) {
     for(auto const &[channel, handler] : commandhandlers) {
@@ -245,6 +245,12 @@ CommandHandler * Bot::is_commandhandler(const std::string &_channel) {
     return nullptr;
 }
 
+/**
+ * @brief gets the timerhandler of a given channel
+ * 
+ * @param _channel the channel to get the handler of
+ * @return TimerHandler * the timerhandler to return
+ */
 TimerHandler * Bot::is_timerhandler(const std::string &_channel) {
     for(auto const &[channel, handler] : timerhandlers) {
         if(!strcmp(channel.c_str(), _channel.c_str()))

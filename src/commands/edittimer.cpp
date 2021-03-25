@@ -6,7 +6,7 @@ EditTimerCommand::EditTimerCommand(Bot *_bot) : bot{_bot} {
     names.push_back("edittimer");
 }
 
-void EditTimerCommand::execute(std::string sender, std::string original_msg, bool mod, bool sub, std::string channel) {
+void EditTimerCommand::execute(std::string sender, std::string original_msg, bool, bool, std::string channel) {
     std::string file = bot->is_timer_file(channel);
     std::fstream timers;
     std::string tmp_result{""};
@@ -91,7 +91,7 @@ void EditTimerCommand::execute(std::string sender, std::string original_msg, boo
         bot->send_chat_message("Could not find the timer you were looking for " + sender + " please make sure you have written the name correctly", channel);
 }
 
-bool EditTimerCommand::has_perms_to_run(bool mod, bool sub, std::string sender) {
+bool EditTimerCommand::has_perms_to_run(bool mod, bool, std::string sender) {
     if(mod || bot->is_channel(sender) || bot->is_owner(sender))
         return true;
     return false;
@@ -113,5 +113,5 @@ std::string EditTimerCommand::generate_help_message(const std::string &channel) 
     return "Use " + bot->is_prefix(channel) + names[0] + " [name] [message] to edit a timed message from this channel.";
 }
 
-void EditTimerCommand::new_output(std::string _result) {}
+void EditTimerCommand::new_output(std::string) {}
 
