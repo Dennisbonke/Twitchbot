@@ -1,68 +1,41 @@
-CXX = g++
+CXX := g++
 
-GDB = -ggdb
-CXXFLAGS = -std=c++2a -c -Wall -Wextra $(GDB) -fcoroutines
+GDB := -ggdb
 
-EXEC = twitchbot
+WARNINGS := -Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align \
+            -Wwrite-strings -Wmissing-declarations -Wredundant-decls \
+			-Winline -Wno-long-long -Wconversion
 
-LIBS = -lsockpp
+CXXFLAGS := -std=c++2a -c $(WARNINGS) $(GDB) -fcoroutines
 
-OBJECTS = main.o bot.o timerhandler.o parser.o commandhandler.o  \
-	pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o \
-	addtimer.o edittimer.o removetimer.o
-	
+EXEC := twitchbot
 
-all: $(EXEC)
+LIBS := -lsockpp
+
+SRCFILES := $(shell find src -type f -name "*.cpp")
+
+DIRS := build/commands build
+
+all: $(DIRS) $(EXEC)
+
+build/commands:
+	mkdir -p $@
+
+build/%.o: src/%.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+OBJECTS := $(patsubst src/%.cpp,build/%.o,$(SRCFILES))
 
 $(EXEC): $(OBJECTS)
 	$(CXX) -O2 -o $@ $^ $(LIBS)
 	@echo "Succesfully build"
 
-main.o: main.cpp bot.o
-	$(CXX) $(CXXFLAGS) $<
-
-bot.o: src/bot.cpp parser.o timerhandler.o commandhandler.o
-	$(CXX) $(CXXFLAGS) $<
-
-timerhandler.o: src/timerhandler.cpp
-	$(CXX) $(CXXFLAGS) $<
-
-parser.o: src/parser.cpp commandhandler.o
-	$(CXX) $(CXXFLAGS) $<
-
-commandhandler.o: src/commandhandler.cpp pingcommand.o changeprefix.o lurkcommand.o helpcommand.o editresult.o addtimer.o edittimer.o removetimer.o
-	$(CXX) $(CXXFLAGS) $<
-
-pingcommand.o: src/commands/pingcommand.cpp
-	$(CXX) $(CXXFLAGS) $<
-
-changeprefix.o: src/commands/changeprefix.cpp
-	$(CXX) $(CXXFLAGS) $<
-
-lurkcommand.o: src/commands/lurkcommand.cpp
-	$(CXX) $(CXXFLAGS) $<
-
-helpcommand.o: src/commands/helpcommand.cpp
-	$(CXX) $(CXXFLAGS) $<
-
-editresult.o: src/commands/editresult.cpp
-	$(CXX) $(CXXFLAGS) $<
-
-addtimer.o: src/commands/addtimer.cpp timerhandler.o
-	$(CXX) $(CXXFLAGS) $<
-
-edittimer.o: src/commands/edittimer.cpp
-	$(CXX) $(CXXFLAGS) $<
-
-removetimer.o: src/commands/removetimer.cpp timerhandler.o
-	$(CXX) $(CXXFLAGS) $<
-
 # Phony targets:
 clean: # Remove all object files
-	rm $(wildcard *.o)
+	-rm -r $(DIRS)
 
 veryclean:
-	rm $(EXEC) $(wildcard *.o)
+	-rm -r $(EXEC) $(DIRS)
 
 # Set the phony targets
-.PHONY: clean veryclean
+.PHONY: clean veryclean build/commands
