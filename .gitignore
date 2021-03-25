@@ -1,3 +1,6 @@
 *.txt
 *.o
+*.d
+build
+twitchbot
 .vscode
