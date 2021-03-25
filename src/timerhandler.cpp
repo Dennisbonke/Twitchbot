@@ -12,7 +12,7 @@
  * @param _bot the bot instance so it can send messages from here
  */
 TimerHandler::TimerHandler(std::string _channel, Bot *_bot) 
-    : timer_file{"files/timers/" + _channel + "_timers.txt"}, channel{_channel}, amount_timers{1}, bot{_bot} {
+    : timer_file{"../files/timers/" + _channel + "_timers.txt"}, channel{_channel}, amount_timers{1}, bot{_bot} {
         std::fstream file;
         file.open(timer_file, std::ios::trunc | std::ios::out);
         if(!file){
