@@ -4,4 +4,4 @@ Making a general purpose twitch chat bot Compile by running make in the root fol
 
 ## Dependancies
 
-This bot is dependant on having both SOCKPP and LIBASYNC installed. You can find both with instructions on their respective repos: <https://github.com/fpagliughi/sockpp> <https://github.com/managarm/libasync>
+This bot is dependant on having both SOCKPP, LIBASYNC and FRIGG installed. You can find both with instructions on their respective repos: <https://github.com/fpagliughi/sockpp> <https://github.com/managarm/libasync> <https://github.com/managarm/frigg>
