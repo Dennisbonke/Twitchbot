@@ -8,13 +8,14 @@ WARNINGS := -Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align \
 
 CXXFLAGS := -std=c++2a -c $(WARNINGS) $(GDB) -fcoroutines
 
+DIRS := build/commands build
+
 EXEC := twitchbot
 
 LIBS := -lsockpp
 
 SRCFILES := $(shell find src -type f -name "*.cpp")
-
-DIRS := build/commands build
+HEADERS := $(wildcard includes/*.hpp includes/*/*.hpp)
 
 all: $(DIRS) $(EXEC)
 
